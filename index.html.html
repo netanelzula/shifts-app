@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- הגדרות PWA לאייפון ואנדרואיד -->
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="סידור עבודה">
+    
+    <title>מערכת ניהול וסידור עבודה מקצועית</title>
+    
+    <!-- יצירת קובץ Manifest דינמי להתקנת האפליקציה -->
+    <link rel="manifest" id="dynamic-manifest">
+
+    <style>
+        :root {
+            var(--primary): #0ea5e9;
+            --primary: #0ea5e9; 
+            --primary-hover: #0284c7; 
+            --bg-main: #f0f9ff; 
+            --border-color: #bae6fd; 
+            --text-dark: #0c4a6e; 
+            --text-muted: #475569; 
+            --success: #10b981; 
+            --danger: #ef4444;
+            --card-bg: #ffffff; 
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+            -webkit-tap-highlight-color: transparent; /* מונע הבהוב בהקלקה בנייד */
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 2px solid var(--border-color);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(14, 165, 233, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .user-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-main);
+            padding: 5px 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .user-selector select {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-dark);
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            overflow-x: auto; /* מאפשר גלילה הצידה במסכים קטנים */
+            white-space: nowrap; /* מונע מהטקסט לרדת שורה */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* עיצוב סרגל הגלילה לטאבים */
+        .nav-tabs::-webkit-scrollbar { height: 4px; }
+        .nav-tabs::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 16px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .tab-btn:hover {
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+        }
+
+        .tab-btn.active {
+            background-color: #e0f2fe; 
+            color: var(--primary-hover);
+            font-weight: 600;
+            border: 1px solid var(--border-color);
+        }
+
+        .view-content { display: none; }
+        .view-content.active { display: block; }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(14, 165, 233, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-hover);
+        }
+
+        .form-group { margin-bottom: 15px; }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--text-dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 15px;
+            background: var(--card-bg);
+            color: var(--text-dark);
+            -webkit-appearance: none; /* מונע עיצוב דיפולטיבי של אייפון בתיבות טקסט */
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.2);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: background 0.2s;
+            width: 100%;
+        }
+
+        .btn:hover { background-color: var(--primary-hover); }
+        .btn-secondary { background-color: var(--border-color); color: var(--text-dark); }
+        .btn-secondary:hover { background-color: #7dd3fc; }
+        .btn-success { background-color: var(--success); color: white;}
+        .btn-success:hover { background-color: #059669; }
+        .btn-danger { background-color: var(--danger); color: white;}
+
+        /* Week Grid Style */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+        }
+
+        .day-column {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 250px;
+        }
+
+        .day-header {
+            text-align: center;
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--primary);
+            margin-bottom: 12px;
+            color: var(--primary-hover);
+        }
+
+        .shift-badge {
+            background: var(--bg-main);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .shift-badge .remove-shift {
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            cursor: pointer;
+            color: var(--danger);
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        /* Table View for Published */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px; /* מבטיח שהטבלה לא תתכווץ מדי בנייד אלא תאפשר גלילה */
+        }
+
+        th, td {
+            border: 1px solid var(--border-color);
+            padding: 12px;
+            text-align: right;
+        }
+
+        th { background-color: #e0f2fe; color: var(--primary-hover); font-weight: 600; }
+        td { background-color: var(--card-bg); font-size: 14px; }
+
+        .constraints-alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .alert-open { background-color: #e0f2fe; color: #0284c7; border: 1px solid var(--border-color); }
+        .alert-closed { background-color: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+
+        /* =========================================
+           Media Queries - רספונסיביות למובייל 
+           ========================================= */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 15px;
+                align-items: stretch;
+            }
+
+            .header-title { text-align: center; }
+
+            .user-selector {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .grid-layout {
+                grid-template-columns: 1fr; /* טור אחד במסכים קטנים */
+                gap: 15px;
+            }
+
+            .week-grid {
+                grid-template-columns: 1fr; /* ימים מוצגים אחד מתחת לשני במובייל */
+                gap: 15px;
+            }
+
+            .day-column {
+                min-height: auto; /* ביטול גובה מינימלי מחייב במובייל */
+            }
+
+            .card {
+                padding: 15px;
+            }
+            
+            .btn-secondary, .btn-success {
+                margin-top: 10px;
+            }
+            
+            #manager-constraints-config {
+                grid-template-columns: 1fr !important; /* אילוצים - טור אחד במובייל */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="header-title">מערכת סידור עבודה שבועית</div>
+    <div class="user-selector">
+        <label>צפייה כגורם:</label>
+        <select id="global-role-select" onchange="handleRoleChange()">
+            <option value="manager">מנהל מערכת</option>
+            <option value="employee">עובד/ת עצמאי</option>
+        </select>
+        <select id="active-employee-select" style="display:none;" onchange="renderConstraintsTab()"></select>
+    </div>
+</header>
+
+<div class="container">
+    <div class="nav-tabs">
+        <button class="tab-btn active" id="tab-build" onclick="switchTab('build')">תכנון סידור עבודה</button>
+        <button class="tab-btn" id="tab-constraints" onclick="switchTab('constraints')">אילוצי עובדים</button>
+        <button class="tab-btn" id="tab-published" onclick="switchTab('published')">סידור מפורסם והיסטוריה</button>
+        <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')">ניהול עובדים והגדרות</button>
+    </div>
+
+    <!-- TAB 1: BUILD SCHEDULE -->
+    <div id="view-build" class="view-content active">
+        <div id="manager-block-notice" style="display:none;" class="card">
+            <p style="color:var(--danger); font-weight:bold; text-align:center;">מצב צפייה בלבד (עובד). כדי לערוך את הסידור, עבור למצב 'מנהל' בראש המסך.</p>
+        </div>
+        <div class="grid-layout" id="manager-grid-interface">
+            <div>
+                <div class="card">
+                    <h3 class="card-title">שיבוץ עובד למשמרת</h3>
+                    <div class="form-group">
+                        <label>בחר עובד/ת</label>
+                        <select id="shift-emp" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>יום בשבוע</label>
+                        <select id="shift-day" class="form-control">
+                            <option value="ראשון">ראשון</option>
+                            <option value="שני">שני</option>
+                            <option value="שלישי">שלישי</option>
+                            <option value="רביעי">רביעי</option>
+                            <option value="חמישי">חמישי</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>שעת התחלה</label>
+                        <input type="time" id="shift-start" class="form-control" value="08:00">
+                    </div>
+                    <div class="form-group">
+                        <label>שעת סיום</label>
+                        <input type="time" id="shift-end" class="form-control" value="16:00">
+                    </div>
+                    <button class="btn" onclick="addShiftToDraft()">שבץ לעבודה</button>
+                </div>
+
+                <div class="card" style="text-align: center;">
+                    <h3 class="card-title">סיום ונעילה</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">בלחיצה על כפתור זה, הסידור הנוכחי יינעל, יפורסם וישמר בהיסטוריה.</p>
+                    <button class="btn btn-success" onclick="publishCurrentSchedule()">פרסם סידור עבודה 🚀</button>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <h3 class="card-title">טיוטת סידור עבודה שבועי</h3>
+                    <div class="week-grid" id="week-grid-draft">
+                        <!-- Dynamic Generation -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: CONSTRAINTS -->
+    <div id="view-constraints" class="view-content">
+        <div class="card">
+            <h3 class="card-title">ניהול חלון הגשת אילוצים</h3>
+            <div id="constraints-status-banner"></div>
+            
+            <div id="manager-constraints-config" style="display:none;" class="grid-layout" style="grid-template-columns: 1fr 1fr; gap:15px; margin-top:15px;">
+                <div class="form-group">
+                    <label>תאריך פתיחת אילוצים</label>
+                    <input type="date" id="const-open-date" class="form-control" onchange="saveConstraintsWindow()">
+                </div>
+                <div class="form-group">
+                    <label>תאריך סגירת אילוצים</label>
+                    <input type="date" id="const-close-date" class="form-control" onchange="saveConstraintsWindow()">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title" id="constraints-action-title">הגשת אילוצים</h3>
+            <div id="constraints-form-wrapper">
+                <p style="font-size:14px; margin-bottom:15px;">אנא רשמו את זמינותכם או אילוצים מיוחדים לכל יום עבודה בשבוע הבא:</p>
+                <div class="week-grid" id="constraints-week-inputs">
+                    <!-- Generation per day -->
+                </div>
+                <button class="btn btn-success" style="margin-top:15px;" onclick="saveEmployeeConstraints()">שמור אילוצים שלי</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: PUBLISHED & HISTORY -->
+    <div id="view-published" class="view-content">
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;" class="card-title">
+                <span style="border-bottom: none; padding: 0; margin: 0;">לוח משמרות סופי</span>
+                <button class="btn btn-secondary" style="width:auto;" onclick="copyScheduleToClipboard()">📋 העתק סידור לוואטסאפ</button>
+            </div>
+            <div id="published-table-container" class="table-responsive">
+                <!-- Table goes here -->
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="card-title">היסטוריית סידורי עבודה</h3>
+            <div id="history-list-container"></div>
+        </div>
+    </div>
+
+    <!-- TAB 4: EMPLOYEES & SETTINGS -->
+    <div id="view-settings" class="view-content">
+        <div class="grid-layout">
+            <div class="card">
+                <h3 class="card-title">הוספת עובד/ת חדש/ה</h3>
+                <div class="form-group">
+                    <label>שם מלא</label>
+                    <input type="text" id="new-emp-name" class="form-control" placeholder="ישראל ישראלי">
+                </div>
+                <div class="form-group">
+                    <label>מספר טלפון (עבור WhatsApp)</label>
+                    <input type="tel" id="new-emp-phone" class="form-control" placeholder="0501234567">
+                </div>
+                <button class="btn" onclick="addEmployee()">שמור עובד</button>
+            </div>
+            <div class="card">
+                <h3 class="card-title">רשימת עובדים פעילים</h3>
+                <div id="manager-employees-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- PWA Setup (Dynamic Manifest & Service Worker) ---
+    function setupPWA() {
+        // 1. Generate Manifest
+        const manifest = {
+            "name": "מערכת סידור עבודה",
+            "short_name": "סידור עבודה",
+            "start_url": window.location.href,
+            "display": "standalone",
+            "background_color": "#f0f9ff",
+            "theme_color": "#0ea5e9",
+            "icons": [{
+                "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%230ea5e9'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>📅</text></svg>",
+                "sizes": "192x192",
+                "type": "image/svg+xml"
+            }]
+        };
+        const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
+        document.getElementById('dynamic-manifest').href = URL.createObjectURL(manifestBlob);
+
+        // 2. Register Dummy Service Worker (Required for 'Add to Home Screen' prompt on Android)
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', (e) => { self.skipWaiting(); });
+                self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); });
+                self.addEventListener('fetch', (e) => {
+                    // Cache bypass for simplicity in single-file
+                    e.respondWith(fetch(e.request).catch(() => new Response('Offline mode not fully supported without physical files.')));
+                });
+            `;
+            const swBlob = new Blob([swCode], {type: 'application/javascript'});
+            navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(err => console.log('SW setup skipped'));
+        }
+    }
+
+    // --- State Initialization ---
+    let state = {
+        employees: JSON.parse(localStorage.getItem('pro_employees')) || [
+            { id: "1", name: "דנה כהן", phone: "0501234567", constraints: {} },
+            { id: "2", name: "רון לוי", phone: "0529876543", constraints: {} }
+        ],
+        draftSchedule: JSON.parse(localStorage.getItem('pro_draft')) || { "ראשון": [], "שני": [], "שלישי": [], "רביעי": [], "חמישי": [] },
+        publishedSchedule: JSON.parse(localStorage.getItem('pro_published')) || null,
+        history: JSON.parse(localStorage.getItem('pro_history')) || [],
+        constraintsWindow: JSON.parse(localStorage.getItem('pro_const_window')) || { open: "", close: "" },
+        currentRole: "manager",
+        activeEmployeeId: "1"
+    };
+
+    const daysOfWeek = ["ראשון", "שני", "שלישי", "רביעי", "חמישי"];
+
+    function init() {
+        setupPWA();
+        
+        if(state.history.length > 4) {
+            state.history = state.history.slice(-4);
+        }
+        
+        setupEmployeeDropdowns();
+        renderDraftGrid();
+        renderConstraintsTab();
+        renderPublishedSchedule();
+        renderHistory();
+        renderEmployeesManagement();
+        handleRoleChange();
+    }
+
+    function saveState() {
+        localStorage.setItem('pro_employees', JSON.stringify(state.employees));
+        localStorage.setItem('pro_draft', JSON.stringify(state.draftSchedule));
+        localStorage.setItem('pro_published', JSON.stringify(state.publishedSchedule));
+        localStorage.setItem('pro_history', JSON.stringify(state.history));
+        localStorage.setItem('pro_const_window', JSON.stringify(state.constraintsWindow));
+    }
+
+    // --- Navigation ---
+    function switchTab(tabId) {
+        document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`view-${tabId}`).classList.add('active');
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+    }
+
+    function handleRoleChange() {
+        state.currentRole = document.getElementById('global-role-select').value;
+        const empSelect = document.getElementById('active-employee-select');
+        
+        if (state.currentRole === 'employee') {
+            empSelect.style.display = "inline-block";
+            document.getElementById('manager-block-notice').style.display = "block";
+            document.getElementById('manager-grid-interface').style.opacity = "0.5";
+            document.getElementById('manager-grid-interface').style.pointerEvents = "none";
+            document.getElementById('manager-constraints-config').style.display = "none";
+            state.activeEmployeeId = empSelect.value || (state.employees.length > 0 ? state.employees[0].id : "");
+        } else {
+            empSelect.style.display = "none";
+            document.getElementById('manager-block-notice').style.display = "none";
+            document.getElementById('manager-grid-interface').style.opacity = "1";
+            document.getElementById('manager-grid-interface').style.pointerEvents = "auto";
+            document.getElementById('manager-constraints-config').style.display = "grid";
+        }
+        renderConstraintsTab();
+    }
+
+    function setupEmployeeDropdowns() {
+        const shiftEmp = document.getElementById('shift-emp');
+        const activeEmpSel = document.getElementById('active-employee-select');
+        
+        shiftEmp.innerHTML = "";
+        activeEmpSel.innerHTML = "";
+
+        state.employees.forEach(emp => {
+            shiftEmp.innerHTML += `<option value="${emp.id}">${emp.name}</option>`;
+            activeEmpSel.innerHTML += `<option value="${emp.id}">${emp.name}</option>`;
+        });
+    }
+
+    // --- Tab 1: Draft Building ---
+    function renderDraftGrid() {
+        const grid = document.getElementById('week-grid-draft');
+        grid.innerHTML = "";
+
+        daysOfWeek.forEach(day => {
+            let shiftsHtml = "";
+            const dayShifts = state.draftSchedule[day] || [];
+            
+            dayShifts.forEach((shift, index) => {
+                const emp = state.employees.find(e => e.id === shift.empId);
+                shiftsHtml += `
+                    <div class="shift-badge">
+                        ${state.currentRole === 'manager' ? `<span class="remove-shift" onclick="removeShift('${day}', ${index})">×</span>` : ''}
+                        <strong>${emp ? emp.name : 'עובד הוסר'}</strong><br>
+                        <span style="color:var(--text-muted); font-size:13px;">${shift.start} - ${shift.end}</span>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML += `
+                <div class="day-column">
+                    <div class="day-header">${day}</div>
+                    <div>${shiftsHtml}</div>
+                </div>
+            `;
+        });
+    }
+
+    function addShiftToDraft() {
+        if(state.currentRole !== 'manager') return;
+        const empId = document.getElementById('shift-emp').value;
+        const day = document.getElementById('shift-day').value;
+        const start = document.getElementById('shift-start').value;
+        const end = document.getElementById('shift-end').value;
+
+        if(!empId) return alert("אנא בחר עובד תחילה");
+
+        state.draftSchedule[day].push({ empId, start, end });
+        
+        // Sort shifts by start time
+        state.draftSchedule[day].sort((a, b) => a.start.localeCompare(b.start));
+        
+        saveState();
+        renderDraftGrid();
+    }
+
+    function removeShift(day, index) {
+        state.draftSchedule[day].splice(index, 1);
+        saveState();
+        renderDraftGrid();
+    }
+
+    function publishCurrentSchedule() {
+        if(!confirm("לפרסם ולנעול את סידור העבודה הנוכחי?")) return;
+        
+        const timestamp = new Date().toLocaleDateString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        state.publishedSchedule = JSON.parse(JSON.stringify(state.draftSchedule));
+        
+        state.history.unshift({
+            id: Date.now(),
+            date: timestamp,
+            schedule: state.publishedSchedule
+        });
+
+        saveState();
+        renderPublishedSchedule();
+        renderHistory();
+        switchTab('published');
+        alert("הסידור פורסם בהצלחה ועבר ללשונית סידורים מפורסמים!");
+    }
+
+    // --- Tab 2: Constraints Engine ---
+    function saveConstraintsWindow() {
+        state.constraintsWindow.open = document.getElementById('const-open-date').value;
+        state.constraintsWindow.close = document.getElementById('const-close-date').value;
+        saveState();
+        renderConstraintsTab();
+    }
+
+    function isConstraintsWindowOpen() {
+        if (!state.constraintsWindow.open || !state.constraintsWindow.close) return false;
+        const today = new Date().toISOString().split('T')[0];
+        return today >= state.constraintsWindow.open && today <= state.constraintsWindow.close;
+    }
+
+    function renderConstraintsTab() {
+        const banner = document.getElementById('constraints-status-banner');
+        const formWrapper = document.getElementById('constraints-form-wrapper');
+        const isOpen = isConstraintsWindowOpen();
+
+        document.getElementById('const-open-date').value = state.constraintsWindow.open;
+        document.getElementById('const-close-date').value = state.constraintsWindow.close;
+
+        if(isOpen) {
+            banner.className = "constraints-alert alert-open";
+            banner.innerHTML = `<strong>חלון האילוצים פתוח!</strong><br>ניתן להגיש שינויים (פעיל בין: ${state.constraintsWindow.open} ל-${state.constraintsWindow.close})`;
+            formWrapper.style.opacity = "1";
+            formWrapper.style.pointerEvents = "auto";
+        } else {
+            banner.className = "constraints-alert alert-closed";
+            banner.innerHTML = `<strong>חלון האילוצים סגור.</strong><br>לא ניתן להגיש או לשנות אילוצים כרגע.`;
+            if(state.currentRole !== 'manager') {
+                formWrapper.style.opacity = "0.5";
+                formWrapper.style.pointerEvents = "none";
+            } else {
+                formWrapper.style.opacity = "1";
+                formWrapper.style.pointerEvents = "auto";
+            }
+        }
+
+        const activeEmp = state.employees.find(e => e.id === state.activeEmployeeId);
+        document.getElementById('constraints-action-title').innerText = state.currentRole === 'manager' ? `צפייה/עריכת אילוצים (עורך את: ${activeEmp?.name || ''})` : `הגשת אילוצים עבור: ${activeEmp?.name || ''}`;
+        
+        const inputsGrid = document.getElementById('constraints-week-inputs');
+        inputsGrid.innerHTML = "";
+
+        if(activeEmp) {
+            daysOfWeek.forEach(day => {
+                const existingValue = activeEmp.constraints[day] || "";
+                inputsGrid.innerHTML += `
+                    <div style="background:var(--bg-main); padding:12px; border-radius:8px; border:1px solid var(--border-color)">
+                        <strong style="display:block; margin-bottom:8px; color: var(--primary-hover);">יום ${day}</strong>
+                        <input type="text" id="const-input-${day}" class="form-control" value="${existingValue}" placeholder="הזן אילוץ (או השאר ריק)">
+                    </div>
+                `;
+            });
+        }
+    }
+
+    function saveEmployeeConstraints() {
+        const activeEmp = state.employees.find(e => e.id === state.activeEmployeeId);
+        if(!activeEmp) return alert("שגיאה בבחירת עובד");
+
+        daysOfWeek.forEach(day => {
+            activeEmp.constraints[day] = document.getElementById(`const-input-${day}`).value.trim();
+        });
+
+        saveState();
+        alert(`האילוצים נשמרו בהצלחה!`);
+    }
+
+    // --- Tab 3: Published Viewer & Sharing ---
+    function renderPublishedSchedule() {
+        const container = document.getElementById('published-table-container');
+        if(!state.publishedSchedule) {
+            container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">טרם פורסם סידור עבודה רשמי לשבוע זה.</p>`;
+            return;
+        }
+
+        let tableHtml = `<table><thead><tr><th>עובד/ת</th><th>טלפון</th>`;
+        daysOfWeek.forEach(day => tableHtml += `<th>${day}</th>`);
+        tableHtml += `</tr></thead><tbody>`;
+
+        state.employees.forEach(emp => {
+            tableHtml += `<tr>
+                <td><strong>${emp.name}</strong></td>
+                <td style="direction:ltr; text-align:right;">${emp.phone || '-'}</td>`;
+            
+            daysOfWeek.forEach(day => {
+                const dayShifts = state.publishedSchedule[day] || [];
+                const empShifts = dayShifts.filter(s => s.empId === emp.id);
+                
+                if(empShifts.length > 0) {
+                    let text = empShifts.map(s => `${s.start}-${s.end}`).join('<br>');
+                    const encodedMsg = encodeURIComponent(`היי ${emp.name}, שובצת ביום ${day} בשעות: ${empShifts.map(s => `${s.start}-${s.end}`).join(', ')}`);
+                    const waBtn = emp.phone ? `<br><a href="https://wa.me/972${emp.phone.substring(1)}?text=${encodedMsg}" target="_blank" style="display:inline-block; margin-top:5px; font-size:12px; color:var(--primary); text-decoration:none; background:#e0f2fe; padding:4px 8px; border-radius:4px;">📲 שלח</a>` : '';
+                    tableHtml += `<td>${text} ${waBtn}</td>`;
+                } else {
+                    tableHtml += `<td style="color:var(--border-color);">-</td>`;
+                }
+            });
+            tableHtml += `</tr>`;
+        });
+
+        tableHtml += `</tbody></table>`;
+        container.innerHTML = tableHtml;
+    }
+
+    function copyScheduleToClipboard() {
+        if(!state.publishedSchedule) return alert("אין סידור מפורסם להעתקה");
+        
+        let txt = "📋 *סידור עבודה שבועי מפורסם:*\n\n";
+        daysOfWeek.forEach(day => {
+            txt += `*יום ${day}:*\n`;
+            const dayShifts = state.publishedSchedule[day] || [];
+            if(dayShifts.length === 0) txt += " - אין משמרות מתוכננות\n";
+            dayShifts.forEach(s => {
+                const emp = state.employees.find(e => e.id === s.empId);
+                txt += `  • ${emp ? emp.name : 'עובד'}: ${s.start} עד ${s.end}\n`;
+            });
+            txt += "\n";
+        });
+
+        navigator.clipboard.writeText(txt).then(() => {
+            alert("הסידור הועתק! אפשר להדביק אותו עכשיו בקבוצת הוואטסאפ.");
+        }).catch(err => {
+            alert("שגיאה בהעתקה, אנא נסה שוב.");
+        });
+    }
+
+    function renderHistory() {
+        const container = document.getElementById('history-list-container');
+        if(state.history.length === 0) {
+            container.innerHTML = `<p style="font-size:14px; color:var(--text-muted)">אין סידורים ישנים בארכיון.</p>`;
+            return;
+        }
+
+        container.innerHTML = "";
+        state.history.forEach((histItem, hIndex) => {
+            container.innerHTML += `
+                <div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center;">
+                    <div style="color:var(--text-dark);">📅 פורסם בתאריך: <strong>${histItem.date}</strong></div>
+                    <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:13px;" onclick="restoreHistoryItem(${hIndex})">שחזר לטיוטה</button>
+                </div>
+            `;
+        });
+    }
+
+    function restoreHistoryItem(index) {
+        if(!confirm("השינויים שלא נשמרו בטיוטה הנוכחית יימחקו. לשחזר?")) return;
+        state.draftSchedule = JSON.parse(JSON.stringify(state.history[index].schedule));
+        saveState();
+        renderDraftGrid();
+        switchTab('build');
+    }
+
+    // --- Tab 4: Employee Config ---
+    function renderEmployeesManagement() {
+        const list = document.getElementById('manager-employees-list');
+        list.innerHTML = "";
+
+        state.employees.forEach(emp => {
+            let constraintsText = "";
+            daysOfWeek.forEach(d => {
+                if(emp.constraints && emp.constraints[d]) constraintsText += `[${d}: ${emp.constraints[d]}] `;
+            });
+
+            list.innerHTML += `
+                <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; padding:15px; border:1px solid var(--border-color); background:var(--bg-main); border-radius:8px; margin-bottom:12px; gap:10px;">
+                    <div style="flex-grow:1;">
+                        <strong style="color:var(--text-dark); font-size:16px;">${emp.name}</strong> <br>
+                        <span style="font-size:14px; color:var(--text-muted);">טלפון: <span style="direction:ltr; display:inline-block;">${emp.phone || 'לא הוזן'}</span></span>
+                        <div style="font-size:13px; color:var(--text-muted); margin-top:5px; background:white; padding:5px; border-radius:4px; border:1px solid #e2e8f0;">${constraintsText ? 'אילוצים: ' + constraintsText : 'אין אילוצים רשומים'}</div>
+                    </div>
+                    <button class="btn btn-danger" style="width:auto; padding:8px 12px; font-size:13px;" onclick="deleteEmployee('${emp.id}')">מחק עובד</button>
+                </div>
+            `;
+        });
+    }
+
+    function addEmployee() {
+        const name = document.getElementById('new-emp-name').value.trim();
+        const phone = document.getElementById('new-emp-phone').value.trim();
+
+        if(!name) return alert("חובה להזין שם עובד");
+
+        state.employees.push({
+            id: Date.now().toString(),
+            name: name,
+            phone: phone,
+            constraints: {}
+        });
+
+        document.getElementById('new-emp-name').value = "";
+        document.getElementById('new-emp-phone').value = "";
+
+        saveState();
+        setupEmployeeDropdowns();
+        renderEmployeesManagement();
+    }
+
+    function deleteEmployee(id) {
+        if(!confirm("האם למחוק עובד זה לצמיתות מהמערכת?")) return;
+        state.employees = state.employees.filter(e => e.id !== id);
+        saveState();
+        setupEmployeeDropdowns();
+        renderEmployeesManagement();
+    }
+
+    window.onload = init;
+</script>
+</body>
+</html>

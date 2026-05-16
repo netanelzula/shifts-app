@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#4f46e5">
+    <meta name="theme-color" content="#1a103c">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Zulatech Shifts">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ZULATECH Shifts">
     
-    <title>Zulatech - מערכת ניהול וסידור עבודה</title>
+    <title>ZULATECH - ניהול סידור עבודה חכם</title>
     
     <link rel="manifest" id="dynamic-manifest">
 
@@ -17,252 +17,190 @@
 
     <style>
         :root {
-            --primary: #4f46e5; 
-            --primary-hover: #4338ca; 
-            --bg-main: #f3f4f6; 
-            --border-color: #d1d5db; 
-            --text-dark: #1f2937; 
-            --text-muted: #6b7280; 
-            --success: #10b981; 
-            --danger: #ef4444;
-            --card-bg: #ffffff; 
+            --bg-main: #0d0620;        
+            --card-bg: #1a103c;        
+            --primary: #7c3aed;        
+            --primary-hover: #6d28d9; 
+            --border-color: #2e205c;   
+            --text-main: #f8fafc;      
+            --text-muted: #9ca3af;     
+            
+            --morning-bg: rgba(217, 119, 6, 0.15);     
+            --evening-bg: #1e1b4b;     
+            --vacation-bg: rgba(75, 85, 99, 0.3);
+            
+            --success: #059669;        
+            --danger: #ef4444;         
+            --cyan-accent: #22d3ee;    
+            --holiday-color: #f43f5e;
         }
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-main);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 0;
-            direction: rtl;
+            color: var(--text-main);
+            margin: 0; padding: 0; direction: rtl;
             -webkit-tap-highlight-color: transparent;
         }
 
-        header {
-            background-color: var(--card-bg);
-            border-bottom: 2px solid var(--border-color);
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0, 0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        header { background-color: var(--bg-main); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .header-logo-container { display: flex; align-items: center; gap: 10px; }
+        .header-title-box { display: flex; flex-direction: column; align-items: flex-end; }
+        .header-title { font-size: 22px; font-weight: bold; color: var(--cyan-accent); margin: 0; line-height: 1.2; }
+        .header-subtitle { font-size: 13px; color: var(--text-muted); }
+        .status-badge { background-color: rgba(16, 185, 129, 0.2); color: #34d399; padding: 6px 12px; border-radius: 20px; font-size: 13px; border: 1px solid #059669; display: flex; align-items: center; gap: 5px; }
 
-        .header-logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .header-logo-container img {
-            height: 45px;
-            object-fit: contain;
-        }
-
-        .header-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--primary);
-            display: none; 
-        }
-
-        .user-selector {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--bg-main);
-            padding: 5px 10px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            font-size: 14px;
-        }
-
-        .user-selector select {
-            padding: 5px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-dark);
-            font-size: 14px;
-        }
+        .nav-tabs { display: flex; gap: 10px; padding: 0 15px 15px 15px; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid var(--border-color); background-color: var(--bg-main); }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        .tab-btn { background: transparent; border: none; padding: 10px 20px; font-size: 15px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 12px; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+        .tab-btn:hover { background-color: var(--card-bg); color: var(--text-main); }
+        .tab-btn.active { background-color: var(--primary); color: white; box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
 
         .container { max-width: 1400px; margin: 20px auto; padding: 0 15px; }
-
-        .nav-tabs {
-            display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color);
-            padding-bottom: 10px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch;
-        }
-        .nav-tabs::-webkit-scrollbar { height: 4px; }
-        .nav-tabs::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-
-        .tab-btn {
-            background: none; border: none; padding: 10px 16px; font-size: 15px; font-weight: 500;
-            color: var(--text-muted); cursor: pointer; border-radius: 6px; transition: all 0.2s; flex-shrink: 0;
-        }
-        .tab-btn:hover { background-color: #e5e7eb; color: var(--text-dark); }
-        .tab-btn.active { background-color: #e0e7ff; color: var(--primary); font-weight: 600; border: 1px solid #c7d2fe; }
-
         .view-content { display: none; }
         .view-content.active { display: block; }
+        .grid-layout { display: grid; grid-template-columns: 1.2fr 3fr; gap: 20px; }
 
-        .grid-layout { display: grid; grid-template-columns: 1fr 3.5fr; gap: 20px; }
-
-        .card {
-            background: var(--card-bg); border: 1px solid var(--border-color);
-            border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0, 0.03); margin-bottom: 20px;
-        }
-
-        .card-title {
-            font-size: 18px; font-weight: 600; margin-top: 0; margin-bottom: 15px;
-            padding-bottom: 10px; border-bottom: 1px solid var(--border-color); color: var(--primary-hover);
-        }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; box-shadow: 0 8px 20px rgba(0,0,0, 0.2); margin-bottom: 20px; }
+        .card-title { font-size: 18px; font-weight: 600; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
 
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; font-size: 14px; font-weight: 500; margin-bottom: 5px; color: var(--text-dark); }
-        .form-control {
-            width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px;
-            box-sizing: border-box; font-size: 15px; background: var(--card-bg); color: var(--text-dark); -webkit-appearance: none;
-        }
-        .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
+        .form-group label { display: block; font-size: 14px; margin-bottom: 5px; color: var(--text-muted); }
+        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 10px; box-sizing: border-box; font-size: 15px; background: #0f0920; color: var(--text-main); }
+        .form-control:focus { outline: none; border-color: var(--primary); }
 
-        /* עיצוב רשימות הצ'קבוקסים */
-        .checkbox-list {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 10px;
-            max-height: 160px;
-            overflow-y: auto;
-        }
-        .checkbox-list label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 8px;
-            font-weight: normal;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .checkbox-list input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
-            accent-color: var(--primary);
-        }
+        .checkbox-list { background: #0f0920; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px; max-height: 160px; overflow-y: auto; }
+        .checkbox-list label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; color: var(--text-main); }
+        .checkbox-list input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
 
-        .btn {
-            background-color: var(--primary); color: white; border: none; padding: 12px 16px;
-            border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: background 0.2s; width: 100%;
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
+        .btn { background-color: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 15px; transition: background 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn:hover { background-color: var(--primary-hover); }
-        .btn-secondary { background-color: #9ca3af; color: white; }
-        .btn-secondary:hover { background-color: #6b7280; }
-        .btn-success { background-color: var(--success); color: white;}
-        .btn-success:hover { background-color: #059669; }
-        .btn-danger { background-color: var(--danger); color: white;}
-        .btn-warning { background-color: #f59e0b; color: white; }
-        .btn-warning:hover { background-color: #d97706; }
-        .btn-info { background-color: #0284c7; color: white; }
-        .btn-info:hover { background-color: #0369a1; }
+        .btn-success { background-color: var(--success); }
+        .btn-danger { background-color: var(--danger); }
+        .btn-warning { background-color: #d97706; }
+        .btn-info { background-color: #2563eb; }
 
-        .week-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
-        .day-column { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; min-height: 250px; display: flex; flex-direction: column; }
-        .day-header { text-align: center; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid var(--primary); margin-bottom: 12px; color: var(--primary-hover); display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .day-header label { font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: normal; color: var(--text-dark); background: #e0e7ff; padding: 2px 8px; border-radius: 4px; }
+        /* שורת פקודות AI */
+        .ai-command-bar { display: flex; gap: 10px; margin-bottom: 15px; background: #0f0920; padding: 10px; border-radius: 12px; border: 1px solid var(--primary); align-items: center; }
+        .ai-command-bar input { flex: 1; background: transparent; border: none; color: white; font-size: 15px; outline: none; padding: 5px; }
+        .ai-command-bar button { background: var(--primary); border: none; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .ai-command-bar button.mic-btn { background: #2e205c; border: 1px solid var(--primary); font-size: 18px; }
+        .ai-command-bar button.mic-btn.recording { background: var(--danger); animation: pulse 1s infinite; }
+
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        .week-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+        .day-column { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+        .day-header { text-align: center; font-weight: bold; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 16px; }
+        .holiday-notice { font-size: 11px; color: var(--holiday-color); font-weight: bold; background: rgba(244, 63, 94, 0.15); padding: 2px 6px; border-radius: 4px; }
         
-        .shift-badge { background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-right: 4px solid var(--primary); }
-        .shift-badge .remove-shift { position: absolute; left: 6px; top: 6px; cursor: pointer; font-size: 16px; line-height: 1; transition: transform 0.2s; }
-        .shift-badge .remove-shift:hover { transform: scale(1.2); }
+        .publish-label { font-size: 11px; cursor: pointer; display: flex; align-items: center; gap: 4px; background: rgba(124, 58, 237, 0.2); padding: 3px 6px; border-radius: 6px; color: #c4b5fd; }
 
-        .shift-section-title { font-size: 14px; font-weight: bold; color: var(--primary-hover); margin: 10px 0; display: flex; align-items: center; gap: 5px; }
-        .shift-period { flex: 1; }
+        .shift-period { padding: 8px; border-radius: 12px; margin-bottom: 10px; min-height: 60px; }
+        .shift-period.morning { background: var(--morning-bg); border: 1px solid rgba(217, 119, 6, 0.3); }
+        .shift-period.evening { background: var(--evening-bg); border: 1px solid #312e81; }
+        .shift-period.vacation { background: var(--vacation-bg); border: 1px solid #4b5563; }
 
-        .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border-color); }
+        .shift-section-title { font-size: 13px; font-weight: bold; margin-bottom: 8px; text-align: center; }
+        .morning .shift-section-title { color: #fbbf24; }
+        .evening .shift-section-title { color: #818cf8; }
+        .vacation .shift-section-title { color: #9ca3af; }
+
+        /* עיצוב פריטים נגררים */
+        .shift-badge { background: rgba(0,0,0,0.4); border: 1px dashed var(--border-color); padding: 8px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; position: relative; cursor: grab; transition: background 0.2s; display: flex; align-items: center; gap: 10px; }
+        .shift-badge:active { cursor: grabbing; }
+        .shift-badge.drag-over { background: rgba(124, 58, 237, 0.5); border: 1px solid var(--primary); }
+        .shift-badge .remove-shift { position: absolute; left: 6px; top: 6px; cursor: pointer; color: var(--danger); font-size: 14px; }
+        .role-tag { font-size: 11px; background: #0f0920; padding: 2px 6px; border-radius: 4px; color: var(--cyan-accent); margin-top: 4px; display: inline-block; }
+
+        .group-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .group-box { background: #0f0920; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; min-height: 200px; }
+        .group-box h4 { margin-top: 0; color: var(--cyan-accent); border-bottom: 1px solid var(--border-color); padding-bottom: 8px; }
+
+        .emp-group-item { padding:10px; background: var(--card-bg); border-radius:8px; margin-bottom:8px; border:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center; cursor: grab; }
+        .emp-group-item.drag-over { background: rgba(124, 58, 237, 0.4); }
+
+        .time-picker-wrapper { display: flex; align-items: center; gap: 8px; background: #0f0920; padding: 5px 10px; border-radius: 10px; border: 1px solid var(--border-color); }
+        .time-picker-wrapper input[type="time"] { background: transparent; color: white; border: none; font-size: 14px; outline: none; cursor: pointer; }
+
+        .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th, td { border: 1px solid var(--border-color); padding: 12px; text-align: right; }
-        th { background-color: #e0e7ff; color: var(--primary-hover); font-weight: 600; }
+        th { background-color: var(--primary); color: white; }
         td { background-color: var(--card-bg); font-size: 14px; vertical-align: top; }
 
-        .constraints-alert { padding: 12px; border-radius: 8px; margin-bottom: 15px; font-size: 14px; line-height: 1.4; }
-        .alert-open { background-color: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; }
-        .alert-closed { background-color: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+        .user-controls { display: flex; align-items: center; gap: 10px; padding: 0 15px; margin-bottom: 15px; }
+        .user-controls select { background: var(--card-bg); color: var(--text-main); border: 1px solid var(--primary); padding: 8px 12px; border-radius: 8px; }
 
-        #loading-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(255,255,255,0.9); display:flex; justify-content:center; align-items:center; z-index: 1000; font-size: 20px; font-weight:bold; color: var(--primary); flex-direction: column; gap: 15px; }
+        #loading-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: var(--bg-main); display:flex; justify-content:center; align-items:center; z-index: 1000; color: var(--cyan-accent); flex-direction: column; gap: 15px; }
 
-        @media (max-width: 1024px) {
-            .grid-layout { grid-template-columns: 1fr; gap: 15px; }
-            .week-grid { grid-template-columns: 1fr; gap: 15px; }
-            .day-column { min-height: auto; }
-        }
-        @media (max-width: 768px) {
-            header { flex-direction: column; gap: 12px; padding: 15px; align-items: stretch; }
-            .header-logo-container { justify-content: center; }
-            .header-title { display: none; }
-            .user-selector { justify-content: center; flex-wrap: wrap; }
-            .card { padding: 15px; }
-            #manager-constraints-config { grid-template-columns: 1fr !important; }
-        }
+        @media (max-width: 1024px) { .grid-layout { grid-template-columns: 1fr; gap: 15px; } .week-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; } }
+        @media (max-width: 768px) { header { flex-direction: column; align-items: flex-start; gap: 15px; } .header-title-box { align-items: flex-start; } .week-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
 <div id="loading-overlay">
-    <img src="zulatech_שם-בלי-רקע.png" alt="Zulatech" style="height: 60px;">
-    <div>מתחבר למסד הנתונים בענן...</div>
+    <div style="font-size: 40px;">🏪</div>
+    <div>טוען מערכת ניהול חכמה...</div>
 </div>
 
 <header>
+    <div id="constraints-top-status" class="status-badge">🔓 אילוצים פתוחים</div>
     <div class="header-logo-container">
-        <img src="zulatech_שם-בלי-רקע.png" alt="Zulatech Logo">
-        <div class="header-title">מערכת סידור עבודה שבועית</div>
-    </div>
-    <div class="user-selector">
-        <label>צפייה כגורם:</label>
-        <select id="global-role-select" onchange="handleRoleChange()">
-            <option value="manager">מנהל מערכת</option>
-            <option value="employee">עובד/ת מערכת</option>
-        </select>
-        <select id="active-employee-select" style="display:none;" onchange="renderConstraintsTab()"></select>
+        <div class="header-title-box">
+            <div class="header-title">ZULATECH</div>
+            <div class="header-subtitle">ניהול סידור עבודה חכם</div>
+        </div>
+        <div style="font-size: 32px; background: var(--card-bg); padding: 5px; border-radius: 10px;">🏪</div>
     </div>
 </header>
 
-<div class="container">
-    <div class="nav-tabs" id="main-nav-tabs">
-        <button class="tab-btn active" id="tab-build" onclick="switchTab('build')">תכנון סידור עבודה</button>
-        <button class="tab-btn" id="tab-constraints" onclick="switchTab('constraints')">אילוצי עובדים</button>
-        <button class="tab-btn" id="tab-published" onclick="switchTab('published')">סידור מפורסם והיסטוריה</button>
-        <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')">ניהול עובדים והגדרות</button>
+<div class="user-controls">
+    <label style="color:var(--text-muted); font-size: 14px;">התחבר כ:</label>
+    <select id="global-role-select" onchange="handleRoleChange()">
+        <option value="manager">מנהל מערכת</option>
+        <option value="employee">עובד/ת מערכת</option>
+    </select>
+    <select id="active-employee-select" style="display:none;" onchange="renderConstraintsTab()"></select>
+    
+    <div style="margin-right: auto; display: flex; align-items: center; gap: 10px;">
+        <label style="color:var(--text-muted); font-size: 14px;">📅 בחר תאריך לסידור:</label>
+        <input type="date" id="schedule-date-picker" class="form-control" style="width:160px; padding:6px;" onchange="handleDateChange()">
     </div>
+</div>
 
+<div class="nav-tabs" id="main-nav-tabs">
+    <button class="tab-btn active" id="tab-build" onclick="switchTab('build')">🗓️ לוח משמרות</button>
+    <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')">👥 עובדים וקבוצות</button>
+    <button class="tab-btn" id="tab-constraints" onclick="switchTab('constraints')">🔒 אילוצי צוות</button>
+    <button class="tab-btn" id="tab-published" onclick="switchTab('published')">📜 היסטוריה ופרסום</button>
+</div>
+
+<div class="container">
     <div id="view-build" class="view-content active">
         <div id="manager-block-notice" style="display:none;" class="card">
-            <p style="color:var(--danger); font-weight:bold; text-align:center;">מצב צפייה בלבד (עובד). לחץ על לשוניות הסידור המפורסם או האילוצים.</p>
+            <p style="color:var(--danger); font-weight:bold; text-align:center;">מצב צפייה בלבד. עבור ללשונית ההיסטוריה לראות את הסידור שלך.</p>
         </div>
         <div class="grid-layout" id="manager-grid-interface">
             <div>
                 <div class="card">
-                    <h3 class="card-title">פאנל שיבוץ מרובה</h3>
-                    
+                    <h3 class="card-title">פאנל שיבוץ מהיר</h3>
                     <div class="form-group">
-                        <label>תפקיד במשמרת</label>
+                        <label>תפקיד / סטטוס משמרת</label>
                         <select id="shift-role" class="form-control">
                             <option value="קופאי/ת">קופאי/ת</option>
                             <option value="מלקט/ת">מלקט/ת</option>
+                            <option value="אחראי/ת">אחראי/ת משמרת</option>
+                            <option value="חופש">🏖️ חופש</option>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>בחר עובד/ים לשיבוץ</label>
-                        <div id="shift-emp-list" class="checkbox-list">
-                            </div>
+                        <div id="shift-emp-list" class="checkbox-list"></div>
                     </div>
-
                     <div class="form-group">
-                        <label>ימים לשיבוץ בשבוע</label>
+                        <label>ימים בשבוע</label>
                         <div class="checkbox-list" style="display: grid; grid-template-columns: 1fr 1fr;">
                             <label><input type="checkbox" class="day-checkbox" value="ראשון"> ראשון</label>
                             <label><input type="checkbox" class="day-checkbox" value="שני"> שני</label>
@@ -272,35 +210,46 @@
                             <label><input type="checkbox" class="day-checkbox" value="שישי"> שישי</label>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label>סוג משמרת</label>
                         <div class="checkbox-list">
-                            <label><input type="checkbox" class="type-checkbox" value="morning"> ☀️ משמרת בוקר (08:00-16:00)</label>
-                            <label><input type="checkbox" class="type-checkbox" value="evening"> 🌙 משמרת ערב (16:00-23:00)</label>
+                            <label><input type="checkbox" class="type-checkbox" value="morning"> ☀️ משמרת בוקר</label>
+                            <label><input type="checkbox" class="type-checkbox" value="evening"> 🌙 משמרת ערב</label>
                         </div>
                     </div>
-
-                    <div style="display:flex; flex-direction:column; gap:10px; margin-top: 20px;">
-                        <button class="btn" onclick="addShiftToDraft()">✅ שבץ לעבודה</button>
-                        <button class="btn btn-info" onclick="autoSchedule()">🤖 שיבוץ עובדים אוטומטי</button>
+                    <div class="form-group">
+                        <label>⏱️ בחירת שעות מותאמת (06:00 - 22:00)</label>
+                        <div style="display: flex; gap: 5px;">
+                            <div class="time-picker-wrapper">⏰ <input type="time" id="shift-start" min="06:00" max="22:00" value="07:00"></div>
+                            <div class="time-picker-wrapper"> עד <input type="time" id="shift-end" min="06:00" max="22:00" value="15:00"></div>
+                        </div>
                     </div>
+                    <button class="btn" onclick="addShiftToDraft()">✅ שבץ ללוח</button>
                 </div>
 
                 <div class="card" style="text-align: center;">
-                    <h3 class="card-title">ניהול חכם ופרסום</h3>
-                    <button class="btn btn-warning" style="margin-bottom: 10px;" onclick="runAIAssistant(true)">🔍 סריקת AI לסידור</button>
-                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">בחר את הימים שברצונך לפרסם בטבלה, ולחץ על פרסום.</p>
-                    <button class="btn btn-success" onclick="publishCurrentSchedule()">פרסם סידור נבחר 🚀</button>
+                    <h3 class="card-title">ניהול והפצה</h3>
+                    <button class="btn btn-warning" style="margin-bottom: 12px;" onclick="autoSchedule()">🤖 שיבוץ אוטומטי מלא</button>
+                    <button class="btn btn-success" onclick="publishCurrentSchedule()">💾 שמור שבוע זה להיסטוריה</button>
                 </div>
             </div>
 
             <div>
                 <div class="card">
+                    <div class="ai-command-bar">
+                        <span style="font-size: 20px;">🤖</span>
+                        <input type="text" id="ai-command-input" placeholder="לדוגמה: תחליף בין נתנאל למשה... או: תעביר את דנה למלקטות">
+                        <button class="mic-btn" id="ai-mic-btn" onclick="toggleVoiceRecognition()" title="דבר ל-AI">🎤</button>
+                        <button onclick="executeAITextCommand()">בצע החלפה</button>
+                    </div>
+
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px;">
-                        <h3 class="card-title" style="border:none; padding:0; margin:0;">סידור עבודה שבועי</h3>
-                        <label style="background: var(--bg-main); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; font-size: 14px;">
-                            <input type="checkbox" id="publish-all" checked onchange="togglePublishAll(this)"> בחר את כל הימים לפרסום
+                        <div style="display: flex; flex-direction: column;">
+                            <h3 class="card-title" id="schedule-range-title" style="border:none; padding:0; margin:0;">טוען תאריכים...</h3>
+                            <span style="font-size: 12px; color: var(--text-muted);">💡 טיפ: סמן עובדים, או פשוט גרור ושחרר אותם כדי להחליף!</span>
+                        </div>
+                        <label class="publish-label">
+                            <input type="checkbox" id="publish-all" checked onchange="togglePublishAll(this)"> סמן הכל לפרסום
                         </label>
                     </div>
                     <div class="week-grid" id="week-grid-draft"></div>
@@ -309,22 +258,61 @@
         </div>
     </div>
 
-    <div id="view-constraints" class="view-content">
-        <div class="card" id="manager-constraints-card">
-            <h3 class="card-title">ניהול חלון הגשת אילוצים</h3>
-            <div id="constraints-status-banner"></div>
-            <div id="manager-constraints-config" class="grid-layout" style="grid-template-columns: 1fr 1fr; gap:15px; margin-top:15px;">
-                <div class="form-group"><label>תאריך פתיחת אילוצים</label><input type="date" id="const-open-date" class="form-control" onchange="saveConstraintsWindow()"></div>
-                <div class="form-group"><label>תאריך סגירת אילוצים</label><input type="date" id="const-close-date" class="form-control" onchange="saveConstraintsWindow()"></div>
+    <div id="view-settings" class="view-content">
+        <div class="grid-layout" style="grid-template-columns: 1fr 2.5fr;">
+            <div class="card">
+                <h3 class="card-title">➕ הוספת עובד/ת</h3>
+                <div class="form-group"><label>שם מלא</label><input type="text" id="new-emp-name" class="form-control"></div>
+                <div class="form-group"><label>מספר טלפון</label><input type="tel" id="new-emp-phone" class="form-control"></div>
+                <div class="form-group">
+                    <label>שיוך קבוצה צוותית</label>
+                    <select id="new-emp-group" class="form-control">
+                        <option value="קופאיות">קופאיות</option>
+                        <option value="malkatot">מלקטות</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="addEmployee()">שמור עובד</button>
+            </div>
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid var(--border-color); padding-bottom:10px;">
+                    <div style="display:flex; flex-direction:column;">
+                        <h3 style="margin:0; color:white;">👥 חלוקת צוותים מוגדרת</h3>
+                        <span style="font-size: 12px; color: var(--text-muted);">💡 ניתן לגרור עובדים או לסמן להעברה</span>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn btn-info" style="width:auto; padding:6px 15px; font-size:13px;" onclick="moveSelectedGroups('קופאיות')">⬅️ העבר מסומנים לקופאיות</button>
+                        <button class="btn btn-info" style="width:auto; padding:6px 15px; font-size:13px;" onclick="moveSelectedGroups('malkatot')">העבר מסומנים למלקטות ➡️</button>
+                    </div>
+                </div>
+                <div class="group-container">
+                    <div class="group-box" id="dropzone-cashiers" ondragover="allowDropGroup(event)" ondrop="dropToGroup(event, 'קופאיות')">
+                        <h4>🛒 קופאיות</h4>
+                        <div id="group-cashiers-list"></div>
+                    </div>
+                    <div class="group-box" id="dropzone-pickers" ondragover="allowDropGroup(event)" ondrop="dropToGroup(event, 'malkatot')">
+                        <h4>📦 מלקטות</h4>
+                        <div id="group-pickers-list"></div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
 
+    <div id="view-constraints" class="view-content">
+        <div class="card" id="manager-constraints-card">
+            <h3 class="card-title">⚙️ ניהול חלון אילוצים</h3>
+            <div id="constraints-status-banner" style="margin-bottom: 15px; padding: 15px; border-radius: 10px; font-weight: bold;"></div>
+            <div id="manager-constraints-config" style="display: flex; gap: 15px;">
+                <div class="form-group" style="flex:1;"><label>תאריך פתיחה</label><input type="date" id="const-open-date" class="form-control" onchange="saveConstraintsWindow()"></div>
+                <div class="form-group" style="flex:1;"><label>תאריך סגירה</label><input type="date" id="const-close-date" class="form-control" onchange="saveConstraintsWindow()"></div>
+            </div>
+        </div>
         <div class="card">
             <h3 class="card-title" id="constraints-action-title">הגשת אילוצים</h3>
             <div id="constraints-form-wrapper">
-                <p style="font-size:14px; margin-bottom:15px;">אנא רשמו את זמינותכם או אילוצים מיוחדים לכל יום עבודה בשבוע הבא (השאר ריק אם אתה יכול לעבוד במשמרת רגילה):</p>
-                <div class="week-grid" id="constraints-week-inputs"></div>
-                <button class="btn btn-success" style="margin-top:15px;" onclick="saveEmployeeConstraints()">שמור אילוצים</button>
+                <p style="font-size:14px; color:var(--text-muted); margin-bottom:15px;">השאר ריק אם באפשרותך לעבוד רגיל.</p>
+                <div class="week-grid" id="constraints-week-inputs" style="grid-template-columns: repeat(3, 1fr);"></div>
+                <button class="btn btn-success" style="margin-top:20px; width: 200px;" onclick="saveEmployeeConstraints()">שמור אילוצים</button>
             </div>
         </div>
     </div>
@@ -332,30 +320,14 @@
     <div id="view-published" class="view-content">
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;" class="card-title">
-                <span style="border-bottom: none; padding: 0; margin: 0;">לוח משמרות סופי</span>
-                <button class="btn btn-secondary" style="width:auto;" onclick="copyScheduleToClipboard()">📋 העתק סידור לוואטסאפ</button>
+                <span style="border: none; padding: 0; margin: 0;">לוח משמרות סופי ומפורסם</span>
+                <button class="btn btn-info" style="width:auto; padding: 8px 15px;" onclick="copyScheduleToClipboard()">📋 העתק לוואטסאפ</button>
             </div>
             <div id="published-table-container" class="table-responsive"></div>
         </div>
-
         <div class="card">
-            <h3 class="card-title">היסטוריית סידורי עבודה</h3>
+            <h3 class="card-title">📜 ארכיון סידורי עבודה שבועיים</h3>
             <div id="history-list-container"></div>
-        </div>
-    </div>
-
-    <div id="view-settings" class="view-content">
-        <div class="grid-layout">
-            <div class="card">
-                <h3 class="card-title">הוספת עובד/ת חדש/ה</h3>
-                <div class="form-group"><label>שם מלא</label><input type="text" id="new-emp-name" class="form-control"></div>
-                <div class="form-group"><label>מספר טלפון (עבור WhatsApp)</label><input type="tel" id="new-emp-phone" class="form-control"></div>
-                <button class="btn" onclick="addEmployee()">שמור עובד</button>
-            </div>
-            <div class="card">
-                <h3 class="card-title">רשימת עובדים פעילים</h3>
-                <div id="manager-employees-list"></div>
-            </div>
         </div>
     </div>
 </div>
@@ -363,12 +335,12 @@
 <script>
     function setupPWA() {
         const manifest = {
-            "name": "Zulatech Shifts",
+            "name": "ZULATECH Shifts",
             "short_name": "Zulatech",
             "start_url": window.location.href,
             "display": "standalone",
-            "background_color": "#f3f4f6",
-            "theme_color": "#4f46e5"
+            "background_color": "#0d0620",
+            "theme_color": "#1a103c"
         };
         const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
         document.getElementById('dynamic-manifest').href = URL.createObjectURL(manifestBlob);
@@ -389,6 +361,13 @@
 
     const daysOfWeek = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי"];
 
+    const israeliHolidays2026 = {
+        "2026-04-02": "ערב פסח (שבתון)", "2026-04-03": "פסח יום א' (שבתון)", "2026-04-09": "שביעי של פסח (שבתון)",
+        "2026-04-21": "ערב יום העצמאות", "2026-04-22": "יום העצמאות (שבתון)", "2026-05-05": "ל״ג בעומר",
+        "2026-05-21": "ערב שבועות", "2026-05-22": "שבועות (שבתון)", "2026-09-11": "ערב ראש השנה",
+        "2026-09-12": "ראש השנה א'", "2026-09-13": "ראש השנה ב'", "2026-09-20": "ערב יום כיפור", "2026-09-21": "יום כיפור (שבתון)"
+    };
+
     let state = {
         employees: [],
         draftSchedule: { "ראשון": [], "שני": [], "שלישי": [], "רביעי": [], "חמישי": [], "שישי": [] },
@@ -396,17 +375,25 @@
         history: [],
         constraintsWindow: { open: "", close: "" },
         currentRole: "manager",
-        activeEmployeeId: ""
+        activeEmployeeId: "",
+        selectedDate: ""
     };
+
+    // מערכים לשמירת סימוני ה-Checkboxes
+    let selectedShiftsForSwap = []; 
 
     function init() {
         setupPWA();
+        const todayStr = new Date().toISOString().split('T')[0];
+        document.getElementById('schedule-date-picker').value = todayStr;
+        state.selectedDate = todayStr;
+
         db.ref('zulatech_shifts').on('value', (snapshot) => {
             const data = snapshot.val();
+            const draft = data ? (data.draftSchedule || {}) : {};
+            daysOfWeek.forEach(day => { state.draftSchedule[day] = draft[day] || []; });
             if (data) {
                 state.employees = data.employees || [];
-                state.draftSchedule = data.draftSchedule || { "ראשון": [], "שני": [], "שלישי": [], "רביעי": [], "חמישי": [], "שישי": [] };
-                if(!state.draftSchedule["שישי"]) state.draftSchedule["שישי"] = [];
                 state.publishedSchedule = data.publishedSchedule || null;
                 state.history = data.history || [];
                 state.constraintsWindow = data.constraintsWindow || { open: "", close: "" };
@@ -414,15 +401,14 @@
             if(state.history.length > 4) state.history = state.history.slice(-4);
             document.getElementById('loading-overlay').style.display = 'none';
             refreshUI();
+            updateTopStatus();
         });
     }
 
     function saveState() {
         db.ref('zulatech_shifts').set({
-            employees: state.employees,
-            draftSchedule: state.draftSchedule,
-            publishedSchedule: state.publishedSchedule,
-            history: state.history,
+            employees: state.employees, draftSchedule: state.draftSchedule,
+            publishedSchedule: state.publishedSchedule, history: state.history,
             constraintsWindow: state.constraintsWindow
         });
     }
@@ -434,17 +420,36 @@
         renderHistory();
         renderEmployeesManagement();
         handleRoleChange(); 
+        updateDateDisplay();
+    }
+
+    function handleDateChange() {
+        state.selectedDate = document.getElementById('schedule-date-picker').value;
+        updateDateDisplay();
+        renderDraftGrid();
+    }
+
+    function updateDateDisplay() {
+        if(!state.selectedDate) return;
+        const current = new Date(state.selectedDate);
+        const startOfWeek = new Date(current.setDate(current.getDate() - current.getDay()));
+        const endOfWeek = new Date(current.setDate(startOfWeek.getDate() + 5));
+        const formatOptions = { day: 'numeric', month: 'short' };
+        document.getElementById('schedule-range-title').innerText = `${startOfWeek.toLocaleDateString('he-IL', formatOptions)} – ${endOfWeek.toLocaleDateString('he-IL', formatOptions)} (2026)`;
+    }
+
+    function getHolidayForDay(dayIndex) {
+        if(!state.selectedDate) return null;
+        const base = new Date(state.selectedDate);
+        const dayDate = new Date(base.setDate(base.getDate() - base.getDay() + dayIndex));
+        return israeliHolidays2026[dayDate.toISOString().split('T')[0]] || null;
     }
 
     function switchTab(tabId) {
         document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        
-        const targetView = document.getElementById(`view-${tabId}`);
-        const targetTab = document.getElementById(`tab-${tabId}`);
-        
-        if(targetView) targetView.classList.add('active');
-        if(targetTab) targetTab.classList.add('active');
+        document.getElementById(`view-${tabId}`).classList.add('active');
+        document.getElementById(`tab-${tabId}`).classList.add('active');
     }
 
     function handleRoleChange() {
@@ -458,167 +463,183 @@
             document.getElementById('manager-constraints-card').style.display = "none";
 
             const activeTab = document.querySelector('.view-content.active').id;
-            if (activeTab === 'view-build' || activeTab === 'view-settings') {
-                switchTab('published');
-            }
+            if (activeTab === 'view-build' || activeTab === 'view-settings') switchTab('published');
             state.activeEmployeeId = empSelect.value || (state.employees.length > 0 ? state.employees[0].id : "");
         } else {
             empSelect.style.display = "none";
-            document.getElementById('tab-build').style.display = "inline-block";
-            document.getElementById('tab-settings').style.display = "inline-block";
+            document.getElementById('tab-build').style.display = "flex";
+            document.getElementById('tab-settings').style.display = "flex";
             document.getElementById('manager-constraints-card').style.display = "block";
-            
             document.getElementById('manager-block-notice').style.display = "none";
-            document.getElementById('manager-grid-interface').style.opacity = "1";
-            document.getElementById('manager-grid-interface').style.pointerEvents = "auto";
         }
         renderConstraintsTab();
-        renderDraftGrid(); 
+        renderDraftGrid();
+        renderEmployeesManagement();
     }
 
     function setupEmployeeDropdowns() {
         const empListDiv = document.getElementById('shift-emp-list');
         const activeEmpSel = document.getElementById('active-employee-select');
-        
         const currentActiveEmp = activeEmpSel.value;
-        
-        empListDiv.innerHTML = "";
-        activeEmpSel.innerHTML = "";
+        empListDiv.innerHTML = ""; activeEmpSel.innerHTML = "";
 
         state.employees.forEach(emp => {
-            empListDiv.innerHTML += `
-                <label>
-                    <input type="checkbox" class="emp-checkbox" value="${emp.id}">
-                    ${emp.name}
-                </label>
-            `;
+            const groupIndicator = emp.group === 'malkatot' ? 'מלקטת' : 'קופאית';
+            empListDiv.innerHTML += `<label><input type="checkbox" class="emp-checkbox" value="${emp.id}"> ${emp.name} (${groupIndicator})</label>`;
             activeEmpSel.innerHTML += `<option value="${emp.id}">${emp.name}</option>`;
         });
-
-        if (currentActiveEmp) {
-            activeEmpSel.value = currentActiveEmp;
-            state.activeEmployeeId = currentActiveEmp;
-        } else if (state.employees.length > 0) {
-            state.activeEmployeeId = state.employees[0].id;
-        }
+        if (currentActiveEmp) { activeEmpSel.value = currentActiveEmp; state.activeEmployeeId = currentActiveEmp; } 
+        else if (state.employees.length > 0) state.activeEmployeeId = state.employees[0].id;
     }
 
-    function togglePublishAll(source) {
-        checkboxes = document.querySelectorAll('.publish-day-checkbox');
-        for(var i=0, n=checkboxes.length;i<n;i++) {
-            checkboxes[i].checked = source.checked;
-        }
-    }
+    function togglePublishAll(source) { document.querySelectorAll('.publish-day-checkbox').forEach(cb => cb.checked = source.checked); }
 
     function addShiftToDraft() {
         if(state.currentRole !== 'manager') return;
-        
         const selectedEmps = Array.from(document.querySelectorAll('.emp-checkbox:checked')).map(cb => cb.value);
         const selectedDays = Array.from(document.querySelectorAll('.day-checkbox:checked')).map(cb => cb.value);
         const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(cb => cb.value);
         const role = document.getElementById('shift-role').value;
+        const start = document.getElementById('shift-start').value;
+        const end = document.getElementById('shift-end').value;
 
-        if (selectedEmps.length === 0 || selectedDays.length === 0 || selectedTypes.length === 0) {
-            return alert("יש לסמן לפחות עובד אחד, יום אחד וסוג משמרת אחד כדי לבצע שיבוץ.");
-        }
+        if (selectedEmps.length === 0 || selectedDays.length === 0 || selectedTypes.length === 0) return alert("יש לבחור עובד/ים, יום/ימים וסוג משמרת.");
 
         selectedDays.forEach(day => {
             selectedTypes.forEach(type => {
-                const start = type === 'morning' ? "08:00" : "16:00";
-                const end = type === 'morning' ? "16:00" : "23:00";
-                
                 selectedEmps.forEach(empId => {
-                    // מניעת שיבוץ כפול של אותו עובד באותה משמרת בדיוק
                     const exists = state.draftSchedule[day].find(s => s.empId === empId && s.type === type);
-                    if(!exists) {
-                        state.draftSchedule[day].push({ empId, start, end, type, role });
-                    }
+                    if(!exists) state.draftSchedule[day].push({ empId, start, end, type, role });
                 });
             });
         });
 
-        // איפוס בחירת עובדים כדי שיהיה נוח להמשיך
         document.querySelectorAll('.emp-checkbox').forEach(cb => cb.checked = false);
         saveState();
     }
 
+    function clearDaySchedule(day) {
+        if(!confirm(`מחיקת כל השיבוצים של יום ${day}?`)) return;
+        state.draftSchedule[day] = [];
+        saveState();
+    }
+
     function autoSchedule() {
-        if(!confirm("השיבוץ האוטומטי ינסה להשלים קופאי ומלקט לכל משמרת (בוקר/ערב) בהתבסס על זמינות העובדים (מי שלא כתב אילוץ לאותו יום נחשב פנוי). להמשיך?")) return;
-
-        const rolesNeeded = ["קופאי/ת", "מלקט/ת"];
-        const typesNeeded = ["morning", "evening"];
-        let changesMade = 0;
-
+        if(!confirm("🤖 מנוע ה-AI ישבץ קופאיות ומלקטות פנויות. להמשיך?")) return;
+        const rolesNeeded = ["קופאי/ת", "מלקט/ת"]; const typesNeeded = ["morning", "evening"]; let changesMade = 0;
         daysOfWeek.forEach(day => {
             typesNeeded.forEach(type => {
                 rolesNeeded.forEach(role => {
-                    // בדיקה האם כבר קיים תפקיד כזה במשמרת זו
                     const exists = state.draftSchedule[day].find(s => s.type === type && s.role === role);
                     if(!exists) {
-                        // חיפוש עובד פנוי
+                        const targetGroup = role === "קופאי/ת" ? "קופאיות" : "malkatot";
                         const availableEmp = state.employees.find(emp => {
-                            // האם הוא כבר עובד במשמרת הזו?
-                            const workingNow = state.draftSchedule[day].find(s => s.empId === emp.id && s.type === type);
-                            if(workingNow) return false;
-                            
-                            // בדיקת אילוצים - אם תיבת האילוץ ריקה, מניחים שהוא פנוי
+                            if(emp.group !== targetGroup) return false;
+                            if(state.draftSchedule[day].find(s => s.empId === emp.id)) return false; 
                             const constraint = emp.constraints && emp.constraints[day];
                             return !constraint || constraint.trim() === '';
                         });
-                        
                         if(availableEmp) {
-                            const start = type === 'morning' ? "08:00" : "16:00";
-                            const end = type === 'morning' ? "16:00" : "23:00";
-                            state.draftSchedule[day].push({ 
-                                empId: availableEmp.id, start, end, type, role 
-                            });
+                            const start = type === 'morning' ? "07:00" : "15:00"; const end = type === 'morning' ? "15:00" : "22:00";
+                            state.draftSchedule[day].push({ empId: availableEmp.id, start, end, type, role });
                             changesMade++;
                         }
                     }
                 });
             });
         });
+        if(changesMade > 0) { saveState(); alert(`✅ שובצו ${changesMade} משמרות בהצלחה!`); } 
+        else alert("הסידור כבר מאוזן או שאין עובדים פנויים.");
+    }
 
-        if(changesMade > 0) {
-            saveState();
-            alert(`בוצעו ${changesMade} שיבוצים אוטומטיים!`);
-        } else {
-            alert("לא נמצאו עובדים פנויים לשיבוץ או שהסידור כבר מלא.");
+    function removeShift(day, index) { state.draftSchedule[day].splice(index, 1); saveState(); }
+
+    /* --- מנגנון החלפה באמצעות סימון Checkboxes (משמרות) --- */
+    function handleShiftCheckbox(cb, day, index) {
+        const val = `${day}|${index}`;
+        if(cb.checked) selectedShiftsForSwap.push(val);
+        else selectedShiftsForSwap = selectedShiftsForSwap.filter(v => v !== val);
+
+        if(selectedShiftsForSwap.length === 2) {
+            setTimeout(() => {
+                if(confirm("להחליף בין העובדים בשתי המשמרות שסימנת?")) {
+                    const [d1, i1] = selectedShiftsForSwap[0].split('|');
+                    const [d2, i2] = selectedShiftsForSwap[1].split('|');
+                    executeShiftSwap(d1, parseInt(i1), d2, parseInt(i2));
+                }
+                document.querySelectorAll('.shift-swap-cb').forEach(c => c.checked = false);
+                selectedShiftsForSwap = [];
+            }, 100);
         }
     }
 
-    function removeShift(day, index) {
-        state.draftSchedule[day].splice(index, 1);
+    function executeShiftSwap(day1, idx1, day2, idx2) {
+        // אנחנו מחליפים רק את ה-empId בין המשבצות כדי לשמור על השעות/תפקיד
+        const emp1 = state.draftSchedule[day1][idx1].empId;
+        const emp2 = state.draftSchedule[day2][idx2].empId;
+        state.draftSchedule[day1][idx1].empId = emp2;
+        state.draftSchedule[day2][idx2].empId = emp1;
         saveState();
+    }
+
+    /* --- מנגנון Drag & Drop (גרירה) למשמרות --- */
+    function dragStartShift(e, day, index) {
+        e.dataTransfer.setData("text/plain", JSON.stringify({ type: 'shift', day, index }));
+        e.target.style.opacity = '0.5';
+    }
+    function dragEndShift(e) { e.target.style.opacity = '1'; document.querySelectorAll('.shift-badge').forEach(el => el.classList.remove('drag-over')); }
+    function dragOverShift(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+    function dragLeaveShift(e) { e.currentTarget.classList.remove('drag-over'); }
+    function dropShift(e, targetDay, targetIndex) {
+        e.preventDefault();
+        e.currentTarget.classList.remove('drag-over');
+        try {
+            const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+            if(data.type === 'shift') {
+                executeShiftSwap(data.day, data.index, targetDay, targetIndex);
+            }
+        } catch(err) {}
     }
 
     function renderDraftGrid() {
         const grid = document.getElementById('week-grid-draft');
         grid.innerHTML = "";
+        selectedShiftsForSwap = []; // איפוס סימונים
 
-        // שמירת הסטטוס הקודם של הצ'קבוקסים לפני הרינדור (למניעת איפוס בעת ריפרש)
-        const checkedStatus = {};
-        document.querySelectorAll('.publish-day-checkbox').forEach(cb => {
-            checkedStatus[cb.value] = cb.checked;
-        });
-
-        daysOfWeek.forEach(day => {
+        daysOfWeek.forEach((day, idx) => {
             const dayShifts = state.draftSchedule[day] || [];
-            const isChecked = checkedStatus[day] !== undefined ? (checkedStatus[day] ? 'checked' : '') : 'checked';
+            const holiday = getHolidayForDay(idx);
             
             const renderShiftsByType = (typeGroup) => {
-                const shifts = dayShifts.map((s, i) => ({...s, originalIndex: i})).filter(s => s.type === typeGroup);
-                if (shifts.length === 0) return '<div style="font-size:12px; color:var(--border-color); text-align:center;">אין משובצים</div>';
+                const shifts = dayShifts.map((s, i) => ({...s, originalIndex: i})).filter(s => s.type === typeGroup || (typeGroup === 'vacation' && s.role === 'חופש'));
+                let filteredShifts = typeGroup !== 'vacation' ? shifts.filter(s => s.role !== 'חופש') : dayShifts.map((s, i) => ({...s, originalIndex: i})).filter(s => s.role === 'חופש');
                 
-                let html = '';
-                shifts.forEach(shift => {
+                if (filteredShifts.length === 0) return `<div style="text-align:center; padding:5px; color:var(--text-muted); font-size:12px;">ריק</div>`;
+                
+                let html = ''; const seenIds = new Set();
+                filteredShifts.forEach(shift => {
+                    const key = `${shift.empId}-${shift.type}-${shift.role}`;
+                    if(seenIds.has(key)) return; seenIds.add(key);
                     const emp = state.employees.find(e => e.id === shift.empId);
+                    
                     html += `
-                        <div class="shift-badge">
-                            ${state.currentRole === 'manager' ? `<span class="remove-shift" onclick="removeShift('${day}', ${shift.originalIndex})" title="מחק משמרת">🗑️</span>` : ''}
-                            <strong style="margin-right:20px; display:block; color:var(--primary-hover);">${emp ? emp.name : 'עובד הוסר'}</strong>
-                            <div style="margin-right:20px; font-size: 13px; margin-top: 3px;">
-                                <span style="background: #e0e7ff; padding: 2px 5px; border-radius: 4px;">${shift.role || 'כללי'}</span>
+                        <div class="shift-badge" 
+                             draggable="${state.currentRole === 'manager'}"
+                             ondragstart="dragStartShift(event, '${day}', ${shift.originalIndex})"
+                             ondragend="dragEndShift(event)"
+                             ondragover="dragOverShift(event)"
+                             ondragleave="dragLeaveShift(event)"
+                             ondrop="dropShift(event, '${day}', ${shift.originalIndex})">
+                            
+                            ${state.currentRole === 'manager' ? `
+                                <input type="checkbox" class="shift-swap-cb" title="סמן להחלפה" onchange="handleShiftCheckbox(this, '${day}', ${shift.originalIndex})">
+                                <span class="remove-shift" onclick="removeShift('${day}', ${shift.originalIndex})">🗑️</span>
+                            ` : ''}
+                            
+                            <div>
+                                <strong style="display:block; color:var(--text-main); font-size:14px;">${emp ? emp.name : 'שגיאה'}</strong>
+                                <span class="role-tag">${shift.role === 'חופש' ? '🏖️ חופש' : shift.role}</span>
+                                <span style="font-size:11px; color:var(--text-muted); display:block;">⏱️ ${shift.start}-${shift.end}</span>
                             </div>
                         </div>
                     `;
@@ -629,313 +650,250 @@
             grid.innerHTML += `
                 <div class="day-column">
                     <div class="day-header">
-                        ${day}
-                        ${state.currentRole === 'manager' ? `<label title="סמן לפרסום"><input type="checkbox" class="publish-day-checkbox" value="${day}" ${isChecked}> פרסם</label>` : ''}
+                        יום ${day}
+                        ${holiday ? `<span class="holiday-notice">🎉 ${holiday}</span>` : ''}
+                        ${state.currentRole === 'manager' ? `<label class="publish-label"><input type="checkbox" class="publish-day-checkbox" value="${day}" checked> פרסם</label>` : ''}
                     </div>
-                    
-                    <div class="shift-period">
-                        <div class="shift-section-title">☀️ משמרת בוקר</div>
-                        ${renderShiftsByType('morning')}
-                    </div>
-                    
-                    <div class="shift-period" style="margin-top: 10px; border-top: 2px dashed var(--border-color); padding-top: 10px;">
-                        <div class="shift-section-title">🌙 משמרת ערב</div>
-                        ${renderShiftsByType('evening')}
-                    </div>
+                    <div class="shift-period morning"><div class="shift-section-title">☀️ בוקר</div>${renderShiftsByType('morning')}</div>
+                    <div class="shift-period evening"><div class="shift-section-title">🌙 ערב</div>${renderShiftsByType('evening')}</div>
+                    <div class="shift-period vacation"><div class="shift-section-title">🏖️ חופשות</div>${renderShiftsByType('vacation')}</div>
+                    ${state.currentRole === 'manager' ? `<button class="btn btn-danger" style="padding:6px; font-size:12px; margin-top:5px;" onclick="clearDaySchedule('${day}')">🗑️ מחק הכל</button>` : ''}
                 </div>
             `;
         });
     }
 
-    function runAIAssistant(manualClick = false) {
-        let missing = [];
-        let warnings = [];
-
-        daysOfWeek.forEach(day => {
-            const shifts = state.draftSchedule[day] || [];
-            const morning = shifts.filter(s => s.type === 'morning');
-            const evening = shifts.filter(s => s.type === 'evening');
-
-            if (morning.length === 0 && day !== "שישי") missing.push(`חסר עובד לבוקר ביום ${day}`);
-            if (evening.length === 0 && day !== "שישי") missing.push(`חסר עובד לערב ביום ${day}`);
-
-            let morningEmps = morning.map(s => s.empId);
-            let eveningEmps = evening.map(s => s.empId);
-            
-            const findDups = (arr, shiftName) => {
-                let counts = {};
-                arr.forEach(id => counts[id] = (counts[id] || 0) + 1);
-                for(let id in counts) {
-                    if(counts[id] > 1) {
-                        const emp = state.employees.find(e => e.id === id);
-                        warnings.push(`כפילות: ${emp ? emp.name : 'עובד'} שובץ פעמיים למשמרת ${shiftName} ביום ${day}`);
-                    }
-                }
-            };
-            
-            findDups(morningEmps, 'בוקר');
-            findDups(eveningEmps, 'ערב');
+    /* --- מנגנון החלפת קבוצות (Checkboxes & Drag Drop) --- */
+    function moveSelectedGroups(targetGroup) {
+        const selected = Array.from(document.querySelectorAll('.emp-group-cb:checked')).map(cb => cb.value);
+        if(selected.length === 0) return alert("לא סומנו עובדים להעברה.");
+        
+        selected.forEach(empId => {
+            const emp = state.employees.find(e => e.id === empId);
+            if(emp) emp.group = targetGroup;
         });
+        saveState();
+    }
 
-        if (manualClick) {
-            if (missing.length === 0 && warnings.length === 0) {
-                alert("✨ תובנות בינה מלאכותית:\nהסידור נראה מצוין! אין חוסרים או כפילויות.");
-            } else {
-                let msg = "✨ תובנות בינה מלאכותית (AI):\n\n";
-                if(missing.length > 0) msg += "🚨 חוסרים שנמצאו:\n- " + missing.join("\n- ") + "\n\n";
-                if(warnings.length > 0) msg += "⚠️ בעיות שיבוץ:\n- " + warnings.join("\n- ");
-                alert(msg);
+    function dragStartGroup(e, empId) {
+        e.dataTransfer.setData("text/plain", JSON.stringify({ type: 'empGroup', empId }));
+        e.target.style.opacity = '0.5';
+    }
+    function dragEndGroup(e) { e.target.style.opacity = '1'; document.querySelectorAll('.group-box').forEach(el => el.style.background = '#0f0920'); }
+    function allowDropGroup(e) { e.preventDefault(); e.currentTarget.style.background = 'rgba(124, 58, 237, 0.2)'; }
+    function dropToGroup(e, targetGroup) {
+        e.preventDefault(); e.currentTarget.style.background = '#0f0920';
+        try {
+            const data = JSON.parse(e.dataTransfer.getData("text/plain"));
+            if(data.type === 'empGroup') {
+                const emp = state.employees.find(e => e.id === data.empId);
+                if(emp && emp.group !== targetGroup) { emp.group = targetGroup; saveState(); }
             }
-        }
-
-        return { hasIssues: (missing.length > 0 || warnings.length > 0), missing, warnings };
-    }
-
-    function publishCurrentSchedule() {
-        const daysToPublish = Array.from(document.querySelectorAll('.publish-day-checkbox:checked')).map(cb => cb.value);
-        if(daysToPublish.length === 0) return alert("יש לבחור לפחות יום אחד לפרסום.");
-
-        const aiCheck = runAIAssistant(false);
-        if (aiCheck.hasIssues) {
-            if(!confirm("🤖 ה-AI זיהה חוסרים או כפילויות בסידור. האם בכל זאת לפרסם את הימים המסומנים?")) return;
-        } else {
-            if(!confirm(`לפרסם ולנעול את ${daysToPublish.length} הימים שנבחרו?`)) return;
-        }
-        
-        const timestamp = new Date().toLocaleDateString('he-IL', {hour: '2-digit', minute:'2-digit'});
-        
-        // יצירת סידור מפורסם במידה ולא קיים, או עדכון רק של הימים שנבחרו
-        if(!state.publishedSchedule) state.publishedSchedule = { "ראשון": [], "שני": [], "שלישי": [], "רביעי": [], "חמישי": [], "שישי": [] };
-        
-        daysToPublish.forEach(day => {
-            state.publishedSchedule[day] = JSON.parse(JSON.stringify(state.draftSchedule[day]));
-        });
-        
-        state.history.unshift({
-            id: Date.now(),
-            date: timestamp + ` (פורסם חלקי / מעודכן)`,
-            schedule: JSON.parse(JSON.stringify(state.publishedSchedule))
-        });
-
-        saveState();
-        switchTab('published');
-        alert("הסידור עבר לפרסום בענן בהצלחה!");
-    }
-
-    function saveConstraintsWindow() {
-        state.constraintsWindow.open = document.getElementById('const-open-date').value;
-        state.constraintsWindow.close = document.getElementById('const-close-date').value;
-        saveState();
-    }
-
-    function isConstraintsWindowOpen() {
-        if (!state.constraintsWindow.open || !state.constraintsWindow.close) return false;
-        const today = new Date().toISOString().split('T')[0];
-        return today >= state.constraintsWindow.open && today <= state.constraintsWindow.close;
-    }
-
-    function renderConstraintsTab() {
-        const banner = document.getElementById('constraints-status-banner');
-        const formWrapper = document.getElementById('constraints-form-wrapper');
-        const isOpen = isConstraintsWindowOpen();
-
-        document.getElementById('const-open-date').value = state.constraintsWindow.open;
-        document.getElementById('const-close-date').value = state.constraintsWindow.close;
-
-        if(isOpen) {
-            banner.className = "constraints-alert alert-open";
-            banner.innerHTML = `<strong>חלון האילוצים פתוח!</strong><br>ניתן להגיש שינויים (פעיל בין: ${state.constraintsWindow.open} ל-${state.constraintsWindow.close})`;
-            formWrapper.style.opacity = "1";
-            formWrapper.style.pointerEvents = "auto";
-        } else {
-            banner.className = "constraints-alert alert-closed";
-            banner.innerHTML = `<strong>חלון האילוצים סגור.</strong><br>לא ניתן להגיש או לשנות אילוצים כרגע.`;
-            if(state.currentRole !== 'manager') {
-                formWrapper.style.opacity = "0.5";
-                formWrapper.style.pointerEvents = "none";
-            } else {
-                formWrapper.style.opacity = "1";
-                formWrapper.style.pointerEvents = "auto";
-            }
-        }
-
-        const activeEmp = state.employees.find(e => e.id === state.activeEmployeeId);
-        document.getElementById('constraints-action-title').innerText = state.currentRole === 'manager' ? `צפייה/עריכת אילוצים (עורך את: ${activeEmp?.name || ''})` : `הגשת אילוצים עבור: ${activeEmp?.name || ''}`;
-        
-        const inputsGrid = document.getElementById('constraints-week-inputs');
-        inputsGrid.innerHTML = "";
-
-        if(activeEmp) {
-            daysOfWeek.forEach(day => {
-                const existingValue = (activeEmp.constraints && activeEmp.constraints[day]) ? activeEmp.constraints[day] : "";
-                inputsGrid.innerHTML += `
-                    <div style="background:var(--card-bg); padding:12px; border-radius:8px; border:1px solid var(--border-color)">
-                        <strong style="display:block; margin-bottom:8px; color: var(--primary-hover);">יום ${day}</strong>
-                        <input type="text" id="const-input-${day}" class="form-control" value="${existingValue}" placeholder="הזן אילוץ (או השאר ריק)">
-                    </div>
-                `;
-            });
-        }
-    }
-
-    function saveEmployeeConstraints() {
-        const activeEmp = state.employees.find(e => e.id === state.activeEmployeeId);
-        if(!activeEmp) return alert("שגיאה בבחירת עובד");
-
-        if (!activeEmp.constraints) activeEmp.constraints = {};
-        daysOfWeek.forEach(day => {
-            activeEmp.constraints[day] = document.getElementById(`const-input-${day}`).value.trim();
-        });
-
-        saveState();
-        alert(`האילוצים נשמרו בהצלחה בענן!`);
-    }
-
-    function renderPublishedSchedule() {
-        const container = document.getElementById('published-table-container');
-        if(!state.publishedSchedule) {
-            container.innerHTML = `<p style="text-align:center; color:var(--text-muted); padding:20px;">טרם פורסם סידור עבודה רשמי לשבוע זה.</p>`;
-            return;
-        }
-
-        let tableHtml = `<table><thead><tr><th>עובד/ת</th>`;
-        daysOfWeek.forEach(day => tableHtml += `<th>${day}</th>`);
-        tableHtml += `</tr></thead><tbody>`;
-
-        state.employees.forEach(emp => {
-            tableHtml += `<tr>
-                <td><strong>${emp.name}</strong></td>`;
-            
-            daysOfWeek.forEach(day => {
-                const dayShifts = state.publishedSchedule[day] || [];
-                const empShifts = dayShifts.filter(s => s.empId === emp.id);
-                
-                if(empShifts.length > 0) {
-                    let text = empShifts.map(s => `<strong>${s.type === 'morning' ? '☀️ בוקר' : '🌙 ערב'}</strong><br>${s.role || ''}`).join('<br><br>');
-                    tableHtml += `<td>${text}</td>`;
-                } else {
-                    tableHtml += `<td style="color:var(--border-color); text-align:center;">-</td>`;
-                }
-            });
-            tableHtml += `</tr>`;
-        });
-
-        tableHtml += `</tbody></table>`;
-        container.innerHTML = tableHtml;
-    }
-
-    function copyScheduleToClipboard() {
-        if(!state.publishedSchedule) return alert("אין סידור מפורסם להעתקה");
-        
-        let txt = "📋 *סידור עבודה שבועי - Zulatech:*\n\n";
-        daysOfWeek.forEach(day => {
-            txt += `*יום ${day}:*\n`;
-            const dayShifts = state.publishedSchedule[day] || [];
-            if(dayShifts.length === 0) {
-                txt += " - אין משמרות מתוכננות\n";
-            } else {
-                const morning = dayShifts.filter(s => s.type === 'morning');
-                const evening = dayShifts.filter(s => s.type === 'evening');
-                
-                if(morning.length > 0) {
-                    txt += `  ☀️ *בוקר:* `;
-                    txt += morning.map(s => {
-                        const emp = state.employees.find(e => e.id === s.empId);
-                        return `${emp ? emp.name : 'עובד'} (${s.role})`;
-                    }).join(', ') + "\n";
-                }
-                if(evening.length > 0) {
-                    txt += `  🌙 *ערב:* `;
-                    txt += evening.map(s => {
-                        const emp = state.employees.find(e => e.id === s.empId);
-                        return `${emp ? emp.name : 'עובד'} (${s.role})`;
-                    }).join(', ') + "\n";
-                }
-            }
-            txt += "\n";
-        });
-
-        navigator.clipboard.writeText(txt).then(() => {
-            alert("הסידור הועתק! אפשר להדביק אותו עכשיו בוואטסאפ.");
-        }).catch(err => {
-            alert("שגיאה בהעתקה, אנא נסה שוב.");
-        });
-    }
-
-    function renderHistory() {
-        const container = document.getElementById('history-list-container');
-        if(state.history.length === 0) {
-            container.innerHTML = `<p style="font-size:14px; color:var(--text-muted)">אין סידורים ישנים בארכיון.</p>`;
-            return;
-        }
-
-        container.innerHTML = "";
-        state.history.forEach((histItem, hIndex) => {
-            container.innerHTML += `
-                <div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center;">
-                    <div style="color:var(--text-dark);">📅 <strong>${histItem.date}</strong></div>
-                    <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:13px;" onclick="restoreHistoryItem(${hIndex})">שחזר לעריכה (טיוטה)</button>
-                </div>
-            `;
-        });
-    }
-
-    function restoreHistoryItem(index) {
-        if(!confirm("השינויים שלא נשמרו בסידור הנוכחי יימחקו. לשחזר?")) return;
-        state.draftSchedule = JSON.parse(JSON.stringify(state.history[index].schedule));
-        saveState();
-        switchTab('build');
+        } catch(err) {}
     }
 
     function renderEmployeesManagement() {
-        const list = document.getElementById('manager-employees-list');
-        list.innerHTML = "";
+        const cashiersDiv = document.getElementById('group-cashiers-list');
+        const pickersDiv = document.getElementById('group-pickers-list');
+        if(!cashiersDiv || !pickersDiv) return;
+        cashiersDiv.innerHTML = ""; pickersDiv.innerHTML = "";
 
         state.employees.forEach(emp => {
-            let constraintsText = "";
-            daysOfWeek.forEach(d => {
-                if(emp.constraints && emp.constraints[d]) constraintsText += `[${d}: ${emp.constraints[d]}] `;
-            });
-
-            list.innerHTML += `
-                <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; padding:15px; border:1px solid var(--border-color); background:var(--card-bg); border-radius:8px; margin-bottom:12px; gap:10px;">
-                    <div style="flex-grow:1;">
-                        <strong style="color:var(--text-dark); font-size:16px;">${emp.name}</strong> <br>
-                        <span style="font-size:14px; color:var(--text-muted);">טלפון: <span style="direction:ltr; display:inline-block;">${emp.phone || 'לא הוזן'}</span></span>
-                        <div style="font-size:13px; color:var(--text-muted); margin-top:5px; background:var(--bg-main); padding:5px; border-radius:4px; border:1px solid #e5e7eb;">${constraintsText ? 'אילוצים: ' + constraintsText : 'אין אילוצים רשומים'}</div>
+            const html = `
+                <div class="emp-group-item" draggable="true" ondragstart="dragStartGroup(event, '${emp.id}')" ondragend="dragEndGroup(event)">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <input type="checkbox" class="emp-group-cb" value="${emp.id}" style="width:16px;height:16px;cursor:pointer;">
+                        <div>
+                            <strong>${emp.name}</strong>
+                            <div style="font-size:11px; color:var(--text-muted);">${emp.phone || ''}</div>
+                        </div>
                     </div>
-                    <button class="btn btn-danger" style="width:auto; padding:8px 12px; font-size:13px;" onclick="deleteEmployee('${emp.id}')">🗑️ מחק עובד</button>
+                    <button class="btn btn-danger" style="width:auto; padding:4px 8px; font-size:11px;" onclick="deleteEmployee('${emp.id}')">🗑️</button>
                 </div>
             `;
+            if (emp.group === 'malkatot') pickersDiv.innerHTML += html;
+            else cashiersDiv.innerHTML += html;
         });
     }
 
     function addEmployee() {
         const name = document.getElementById('new-emp-name').value.trim();
         const phone = document.getElementById('new-emp-phone').value.trim();
+        const group = document.getElementById('new-emp-group').value;
+        if(!name) return alert("אנא הזן שם.");
+        state.employees.push({ id: Date.now().toString(), name, phone, group, constraints: {} });
+        document.getElementById('new-emp-name').value = ""; document.getElementById('new-emp-phone').value = "";
+        saveState();
+    }
+    function deleteEmployee(id) { if(confirm("להסיר עובד זה מהמערכת?")) { state.employees = state.employees.filter(e => e.id !== id); saveState(); } }
 
-        if(!name) return alert("חובה להזין שם עובד");
+    /* --- מערכת פקודות AI (טקסט וקול) --- */
+    let recognition;
+    function initSpeechRecognition() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.lang = 'he-IL';
+            recognition.interimResults = false;
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById('ai-command-input').value = transcript;
+                executeAITextCommand();
+                document.getElementById('ai-mic-btn').classList.remove('recording');
+            };
+            recognition.onerror = function() { document.getElementById('ai-mic-btn').classList.remove('recording'); };
+            recognition.onend = function() { document.getElementById('ai-mic-btn').classList.remove('recording'); };
+        } else {
+            document.getElementById('ai-mic-btn').style.display = 'none'; // Hide if not supported
+        }
+    }
 
-        state.employees.push({
-            id: Date.now().toString(),
-            name: name,
-            phone: phone,
-            constraints: {}
+    function toggleVoiceRecognition() {
+        if(!recognition) { alert("זיהוי קולי אינו נתמך בדפדפן זה. נא השתמש בטקסט."); return; }
+        const btn = document.getElementById('ai-mic-btn');
+        if(btn.classList.contains('recording')) { recognition.stop(); btn.classList.remove('recording'); } 
+        else { recognition.start(); btn.classList.add('recording'); }
+    }
+
+    function executeAITextCommand() {
+        const input = document.getElementById('ai-command-input').value.trim();
+        if(!input) return;
+
+        // חיפוש עובדים בפקודה
+        const mentionedEmps = state.employees.filter(e => input.includes(e.name));
+        
+        // 1. פקודת העברת קבוצות: "תעביר את נתנאל למלקטות"
+        if((input.includes('תעביר') || input.includes('להעביר') || input.includes('שים')) && mentionedEmps.length >= 1) {
+            const targetGroup = (input.includes('מלקטות') || input.includes('למלקטות')) ? 'malkatot' : (input.includes('קופאיות') || input.includes('לקופאיות') ? 'קופאיות' : null);
+            if(targetGroup) {
+                mentionedEmps.forEach(emp => emp.group = targetGroup);
+                saveState();
+                alert(`🤖 AI ביצע: העברת את הצוות לקבוצת ${targetGroup === 'malkatot' ? 'מלקטות' : 'קופאיות'}.`);
+                document.getElementById('ai-command-input').value = '';
+                return;
+            }
+        }
+
+        // 2. פקודת החלפת משמרות: "תחליף בין משה לנתנאל"
+        if((input.includes('החלף') || input.includes('תחליף') || input.includes('להחליף')) && mentionedEmps.length === 2) {
+            const emp1 = mentionedEmps[0]; const emp2 = mentionedEmps[1];
+            let swapsMade = 0;
+            
+            // בדיקה אם צוין יום ספציפי
+            const specificDays = daysOfWeek.filter(d => input.includes(d));
+            const daysToCheck = specificDays.length > 0 ? specificDays : daysOfWeek;
+
+            daysToCheck.forEach(day => {
+                state.draftSchedule[day].forEach(shift => {
+                    if(shift.empId === emp1.id) { shift.empId = emp2.id; swapsMade++; }
+                    else if(shift.empId === emp2.id) { shift.empId = emp1.id; swapsMade++; }
+                });
+            });
+
+            if(swapsMade > 0) {
+                saveState();
+                alert(`🤖 AI ביצע: החלפת משמרות בהצלחה בין ${emp1.name} ל-${emp2.name}.`);
+            } else {
+                alert(`🤖 AI: לא מצאתי משמרות רשומות לעובדים אלו כדי להחליף ביניהם.`);
+            }
+            document.getElementById('ai-command-input').value = '';
+            return;
+        }
+
+        alert("🤖 AI: לא זיהיתי פקודה חוקית. נסה 'תחליף בין X ל-Y' או 'תעביר את X למלקטות'.");
+    }
+
+    function publishCurrentSchedule() {
+        const daysToPublish = Array.from(document.querySelectorAll('.publish-day-checkbox:checked')).map(cb => cb.value);
+        if(daysToPublish.length === 0) return alert("בחר לפחות יום אחד לפרסום.");
+        const timestamp = new Date().toLocaleDateString('he-IL', {hour: '2-digit', minute:'2-digit'});
+        if(!state.publishedSchedule) state.publishedSchedule = { "ראשון": [], "שני": [], "שלישי": [], "רביעי": [], "חמישי": [], "שישי": [] };
+        daysToPublish.forEach(day => state.publishedSchedule[day] = JSON.parse(JSON.stringify(state.draftSchedule[day])) );
+        state.history.unshift({ id: Date.now(), date: timestamp, schedule: JSON.parse(JSON.stringify(state.publishedSchedule)) });
+        saveState(); switchTab('published'); alert("הסידור נשמר ופורסם בהצלחה!");
+    }
+
+    function updateTopStatus() {
+        const topStatus = document.getElementById('constraints-top-status');
+        if(isConstraintsWindowOpen()) { topStatus.innerHTML = `🔓 אילוצים פתוחים`; topStatus.style.color = "#34d399"; topStatus.style.backgroundColor = "rgba(16, 185, 129, 0.2)"; } 
+        else { topStatus.innerHTML = `🔒 אילוצים סגורים`; topStatus.style.color = "#f87171"; topStatus.style.backgroundColor = "rgba(239, 68, 68, 0.2)"; }
+    }
+    function saveConstraintsWindow() { state.constraintsWindow.open = document.getElementById('const-open-date').value; state.constraintsWindow.close = document.getElementById('const-close-date').value; saveState(); updateTopStatus(); }
+    function isConstraintsWindowOpen() { if (!state.constraintsWindow.open || !state.constraintsWindow.close) return false; const today = new Date().toISOString().split('T')[0]; return today >= state.constraintsWindow.open && today <= state.constraintsWindow.close; }
+
+    function renderConstraintsTab() {
+        const banner = document.getElementById('constraints-status-banner');
+        const formWrapper = document.getElementById('constraints-form-wrapper');
+        if(isConstraintsWindowOpen()) { banner.style.backgroundColor = "rgba(16, 185, 129, 0.2)"; banner.style.color = "#34d399"; banner.innerHTML = `✅ חלון הגשת האילוצים פתוח כעת לכל העובדים`; formWrapper.style.opacity = "1"; formWrapper.style.pointerEvents = "auto"; } 
+        else { banner.style.backgroundColor = "rgba(239, 68, 68, 0.2)"; banner.style.color = "#f87171"; banner.innerHTML = `❌ חלון האילוצים סגור`; if(state.currentRole !== 'manager') { formWrapper.style.opacity = "0.3"; formWrapper.style.pointerEvents = "none"; } }
+        
+        const activeEmp = state.employees.find(e => e.id === state.activeEmployeeId);
+        document.getElementById('constraints-action-title').innerText = `הגשת אילוצים עבור: ${activeEmp?.name || ''}`;
+        const inputsGrid = document.getElementById('constraints-week-inputs'); inputsGrid.innerHTML = "";
+        
+        if(activeEmp) {
+            daysOfWeek.forEach(day => {
+                const existingValue = (activeEmp.constraints && activeEmp.constraints[day]) ? activeEmp.constraints[day] : "";
+                inputsGrid.innerHTML += `<div style="background:#0f0920; padding:12px; border-radius:12px; border:1px solid var(--border-color)"><strong style="display:block; margin-bottom:8px; color: var(--primary);">יום ${day}</strong><input type="text" id="const-input-${day}" class="form-control" value="${existingValue}" placeholder="פנוי / חופש / אילוץ"></div>`;
+            });
+        }
+    }
+
+    function saveEmployeeConstraints() {
+        const activeEmp = state.employees.find(e => e.id === state.activeEmployeeId); if(!activeEmp) return;
+        if (!activeEmp.constraints) activeEmp.constraints = {};
+        daysOfWeek.forEach(day => activeEmp.constraints[day] = document.getElementById(`const-input-${day}`).value.trim());
+        saveState(); alert(`האילוצים נשמרו במערכת!`);
+    }
+
+    function renderPublishedSchedule() {
+        const container = document.getElementById('published-table-container');
+        if(!state.publishedSchedule) { container.innerHTML = `<p style="text-align:center; padding:20px;">טרם פורסם סידור סופי.</p>`; return; }
+        let tableHtml = `<table><thead><tr><th>שם העובד/ת</th>`; daysOfWeek.forEach(day => tableHtml += `<th>${day}</th>`); tableHtml += `</tr></thead><tbody>`;
+        state.employees.forEach(emp => {
+            tableHtml += `<tr><td><strong>${emp.name}</strong></td>`;
+            daysOfWeek.forEach(day => {
+                const empShifts = (state.publishedSchedule[day] || []).filter(s => s.empId === emp.id);
+                if(empShifts.length > 0) {
+                    let text = empShifts.map(s => s.role === 'חופש' ? '🏖️ חופש' : `<span>${s.type==='morning'?'☀️ בוקר':'🌙 ערב'}</span><br><span style="font-size:11px; color:gray;">${s.role} (${s.start}-${s.end})</span>`).join('<br><br>');
+                    tableHtml += `<td>${text}</td>`;
+                } else tableHtml += `<td style="color:#4b5563; text-align:center;">-</td>`;
+            });
+            tableHtml += `</tr>`;
         });
-
-        document.getElementById('new-emp-name').value = "";
-        document.getElementById('new-emp-phone').value = "";
-
-        saveState();
+        container.innerHTML = tableHtml + `</tbody></table>`;
     }
 
-    function deleteEmployee(id) {
-        if(!confirm("האם למחוק עובד זה לצמיתות מהמערכת? (זה לא ימחק אותו מסידורים קיימים שפורסמו)")) return;
-        state.employees = state.employees.filter(e => e.id !== id);
-        saveState();
+    function copyScheduleToClipboard() {
+        if(!state.publishedSchedule) return; let txt = "📋 *סידור עבודה מבית ZULATECH:*\n\n";
+        daysOfWeek.forEach(day => {
+            const dayShifts = state.publishedSchedule[day] || [];
+            if(dayShifts.length > 0) {
+                txt += `*יום ${day}:*\n`;
+                const morning = dayShifts.filter(s => s.type === 'morning' && s.role !== 'חופש');
+                const evening = dayShifts.filter(s => s.type === 'evening' && s.role !== 'חופש');
+                const vac = dayShifts.filter(s => s.role === 'חופש');
+                if(morning.length > 0) txt += `  ☀️ בוקר: ` + morning.map(s => `${state.employees.find(e => e.id === s.empId)?.name || ''} (${s.role})`).join(', ') + "\n";
+                if(evening.length > 0) txt += `  🌙 ערב: ` + evening.map(s => `${state.employees.find(e => e.id === s.empId)?.name || ''} (${s.role})`).join(', ') + "\n";
+                if(vac.length > 0) txt += `  🏖️ חופש: ` + vac.map(s => `${state.employees.find(e => e.id === s.empId)?.name || ''}`).join(', ') + "\n";
+                txt += "\n";
+            }
+        });
+        navigator.clipboard.writeText(txt).then(() => alert("הסידור הועתק לקליפבורד! מוכן להדבקה בוואטסאפ."));
     }
 
-    window.onload = init;
+    function renderHistory() {
+        const container = document.getElementById('history-list-container');
+        if(state.history.length === 0) { container.innerHTML = `<p style="font-size:14px; color:var(--text-muted)">אין ארכיון זמין.</p>`; return; }
+        container.innerHTML = "";
+        state.history.forEach((histItem, hIndex) => {
+            container.innerHTML += `<div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;"><div>📅 סידור שננעל בתאריך: <strong>${histItem.date}</strong></div><button class="btn btn-warning" style="width:auto; padding:6px 12px;" onclick="restoreHistoryItem(${hIndex})">שחזר ללוח העבודה</button></div>`;
+        });
+    }
+
+    function restoreHistoryItem(index) { if(!confirm("לשחזר את השבוע הנבחר?")) return; const loaded = JSON.parse(JSON.stringify(state.history[index].schedule)); daysOfWeek.forEach(d => state.draftSchedule[d] = loaded[d] || []); saveState(); switchTab('build'); }
+
+    window.onload = () => { init(); initSpeechRecognition(); };
 </script>
 </body>
 </html>

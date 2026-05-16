@@ -17,7 +17,6 @@
 
     <style>
         :root {
-            /* פלטת צבעים חדשה ונעימה לעין */
             --primary: #4f46e5; 
             --primary-hover: #4338ca; 
             --bg-main: #f3f4f6; 
@@ -129,9 +128,35 @@
         }
         .form-control:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2); }
 
+        /* עיצוב רשימות הצ'קבוקסים */
+        .checkbox-list {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+        .checkbox-list label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-weight: normal;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .checkbox-list input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
         .btn {
             background-color: var(--primary); color: white; border: none; padding: 12px 16px;
             border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 15px; transition: background 0.2s; width: 100%;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
         .btn:hover { background-color: var(--primary-hover); }
         .btn-secondary { background-color: #9ca3af; color: white; }
@@ -141,15 +166,20 @@
         .btn-danger { background-color: var(--danger); color: white;}
         .btn-warning { background-color: #f59e0b; color: white; }
         .btn-warning:hover { background-color: #d97706; }
+        .btn-info { background-color: #0284c7; color: white; }
+        .btn-info:hover { background-color: #0369a1; }
 
         .week-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; }
-        .day-column { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; min-height: 250px; }
-        .day-header { text-align: center; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid var(--primary); margin-bottom: 12px; color: var(--primary-hover); }
-        .shift-badge { background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .day-column { background: var(--bg-main); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px; min-height: 250px; display: flex; flex-direction: column; }
+        .day-header { text-align: center; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid var(--primary); margin-bottom: 12px; color: var(--primary-hover); display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .day-header label { font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: normal; color: var(--text-dark); background: #e0e7ff; padding: 2px 8px; border-radius: 4px; }
+        
+        .shift-badge { background: var(--card-bg); border: 1px solid var(--border-color); padding: 8px; border-radius: 6px; margin-bottom: 8px; font-size: 14px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-right: 4px solid var(--primary); }
         .shift-badge .remove-shift { position: absolute; left: 6px; top: 6px; cursor: pointer; font-size: 16px; line-height: 1; transition: transform 0.2s; }
         .shift-badge .remove-shift:hover { transform: scale(1.2); }
 
-        .shift-section-title { font-size: 13px; font-weight: bold; color: var(--text-muted); margin: 10px 0 5px 0; display: flex; align-items: center; gap: 5px; }
+        .shift-section-title { font-size: 14px; font-weight: bold; color: var(--primary-hover); margin: 10px 0; display: flex; align-items: center; gap: 5px; }
+        .shift-period { flex: 1; }
 
         .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 8px; border: 1px solid var(--border-color); }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
@@ -163,7 +193,7 @@
 
         #loading-overlay { position: fixed; top:0; left:0; right:0; bottom:0; background: rgba(255,255,255,0.9); display:flex; justify-content:center; align-items:center; z-index: 1000; font-size: 20px; font-weight:bold; color: var(--primary); flex-direction: column; gap: 15px; }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
             .grid-layout { grid-template-columns: 1fr; gap: 15px; }
             .week-grid { grid-template-columns: 1fr; gap: 15px; }
             .day-column { min-height: auto; }
@@ -215,50 +245,64 @@
         <div class="grid-layout" id="manager-grid-interface">
             <div>
                 <div class="card">
-                    <h3 class="card-title">שיבוץ עובד למשמרת</h3>
+                    <h3 class="card-title">פאנל שיבוץ מרובה</h3>
+                    
                     <div class="form-group">
-                        <label>בחר עובד/ת</label>
-                        <select id="shift-emp" class="form-control"></select>
-                    </div>
-                    <div class="form-group">
-                        <label>יום בשבוע</label>
-                        <select id="shift-day" class="form-control">
-                            <option value="ראשון">ראשון</option>
-                            <option value="שני">שני</option>
-                            <option value="שלישי">שלישי</option>
-                            <option value="רביעי">רביעי</option>
-                            <option value="חמישי">חמישי</option>
-                            <option value="שישי">שישי</option>
+                        <label>תפקיד במשמרת</label>
+                        <select id="shift-role" class="form-control">
+                            <option value="קופאי/ת">קופאי/ת</option>
+                            <option value="מלקט/ת">מלקט/ת</option>
                         </select>
                     </div>
+
                     <div class="form-group">
-                        <label>סוג משמרת</label>
-                        <select id="shift-type" class="form-control">
-                            <option value="morning">בוקר</option>
-                            <option value="evening">ערב</option>
-                        </select>
+                        <label>בחר עובד/ים לשיבוץ</label>
+                        <div id="shift-emp-list" class="checkbox-list">
+                            </div>
                     </div>
+
                     <div class="form-group">
-                        <label>שעות (אופציונלי לשינוי)</label>
-                        <div style="display:flex; gap:10px;">
-                            <input type="time" id="shift-start" class="form-control" value="08:00">
-                            <input type="time" id="shift-end" class="form-control" value="16:00">
+                        <label>ימים לשיבוץ בשבוע</label>
+                        <div class="checkbox-list" style="display: grid; grid-template-columns: 1fr 1fr;">
+                            <label><input type="checkbox" class="day-checkbox" value="ראשון"> ראשון</label>
+                            <label><input type="checkbox" class="day-checkbox" value="שני"> שני</label>
+                            <label><input type="checkbox" class="day-checkbox" value="שלישי"> שלישי</label>
+                            <label><input type="checkbox" class="day-checkbox" value="רביעי"> רביעי</label>
+                            <label><input type="checkbox" class="day-checkbox" value="חמישי"> חמישי</label>
+                            <label><input type="checkbox" class="day-checkbox" value="שישי"> שישי</label>
                         </div>
                     </div>
-                    <button class="btn" onclick="addShiftToDraft()">שבץ לעבודה</button>
+
+                    <div class="form-group">
+                        <label>סוג משמרת</label>
+                        <div class="checkbox-list">
+                            <label><input type="checkbox" class="type-checkbox" value="morning"> ☀️ משמרת בוקר (08:00-16:00)</label>
+                            <label><input type="checkbox" class="type-checkbox" value="evening"> 🌙 משמרת ערב (16:00-23:00)</label>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px; margin-top: 20px;">
+                        <button class="btn" onclick="addShiftToDraft()">✅ שבץ לעבודה</button>
+                        <button class="btn btn-info" onclick="autoSchedule()">🤖 שיבוץ עובדים אוטומטי</button>
+                    </div>
                 </div>
 
                 <div class="card" style="text-align: center;">
                     <h3 class="card-title">ניהול חכם ופרסום</h3>
-                    <button class="btn btn-warning" style="margin-bottom: 10px;" onclick="runAIAssistant(true)">🤖 סריקת AI לסידור</button>
-                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">בלחיצה על פרסום, הסידור יינעל וישמר בהיסטוריה.</p>
-                    <button class="btn btn-success" onclick="publishCurrentSchedule()">פרסם סידור עבודה 🚀</button>
+                    <button class="btn btn-warning" style="margin-bottom: 10px;" onclick="runAIAssistant(true)">🔍 סריקת AI לסידור</button>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:15px;">בחר את הימים שברצונך לפרסם בטבלה, ולחץ על פרסום.</p>
+                    <button class="btn btn-success" onclick="publishCurrentSchedule()">פרסם סידור נבחר 🚀</button>
                 </div>
             </div>
 
             <div>
                 <div class="card">
-                    <h3 class="card-title">סידור עבודה שבועי</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 15px;">
+                        <h3 class="card-title" style="border:none; padding:0; margin:0;">סידור עבודה שבועי</h3>
+                        <label style="background: var(--bg-main); padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border-color); cursor: pointer; font-size: 14px;">
+                            <input type="checkbox" id="publish-all" checked onchange="togglePublishAll(this)"> בחר את כל הימים לפרסום
+                        </label>
+                    </div>
                     <div class="week-grid" id="week-grid-draft"></div>
                 </div>
             </div>
@@ -278,7 +322,7 @@
         <div class="card">
             <h3 class="card-title" id="constraints-action-title">הגשת אילוצים</h3>
             <div id="constraints-form-wrapper">
-                <p style="font-size:14px; margin-bottom:15px;">אנא רשמו את זמינותכם או אילוצים מיוחדים לכל יום עבודה בשבוע הבא:</p>
+                <p style="font-size:14px; margin-bottom:15px;">אנא רשמו את זמינותכם או אילוצים מיוחדים לכל יום עבודה בשבוע הבא (השאר ריק אם אתה יכול לעבוד במשמרת רגילה):</p>
                 <div class="week-grid" id="constraints-week-inputs"></div>
                 <button class="btn btn-success" style="margin-top:15px;" onclick="saveEmployeeConstraints()">שמור אילוצים</button>
             </div>
@@ -355,17 +399,6 @@
         activeEmployeeId: ""
     };
 
-    // שינוי אוטומטי של השעות לפי סוג המשמרת בתפריט הנפתח
-    document.getElementById('shift-type').addEventListener('change', function(e) {
-        if(e.target.value === 'morning') {
-            document.getElementById('shift-start').value = "08:00";
-            document.getElementById('shift-end').value = "16:00";
-        } else {
-            document.getElementById('shift-start').value = "16:00";
-            document.getElementById('shift-end').value = "23:00";
-        }
-    });
-
     function init() {
         setupPWA();
         db.ref('zulatech_shifts').on('value', (snapshot) => {
@@ -373,17 +406,12 @@
             if (data) {
                 state.employees = data.employees || [];
                 state.draftSchedule = data.draftSchedule || { "ראשון": [], "שני": [], "שלישי": [], "רביעי": [], "חמישי": [], "שישי": [] };
-                
-                // הבטחה שיום שישי קיים באובייקט אם הנתונים מהענן ישנים
                 if(!state.draftSchedule["שישי"]) state.draftSchedule["שישי"] = [];
-
                 state.publishedSchedule = data.publishedSchedule || null;
                 state.history = data.history || [];
                 state.constraintsWindow = data.constraintsWindow || { open: "", close: "" };
             }
-            
             if(state.history.length > 4) state.history = state.history.slice(-4);
-            
             document.getElementById('loading-overlay').style.display = 'none';
             refreshUI();
         });
@@ -425,23 +453,17 @@
         
         if (state.currentRole === 'employee') {
             empSelect.style.display = "inline-block";
-            
-            // הסתרת לשוניות מנהל
             document.getElementById('tab-build').style.display = "none";
             document.getElementById('tab-settings').style.display = "none";
             document.getElementById('manager-constraints-card').style.display = "none";
 
-            // ניתוב מחדש אם העובד נמצא בלשונית של מנהל
             const activeTab = document.querySelector('.view-content.active').id;
             if (activeTab === 'view-build' || activeTab === 'view-settings') {
                 switchTab('published');
             }
-
             state.activeEmployeeId = empSelect.value || (state.employees.length > 0 ? state.employees[0].id : "");
         } else {
             empSelect.style.display = "none";
-            
-            // הצגת לשוניות מנהל
             document.getElementById('tab-build').style.display = "inline-block";
             document.getElementById('tab-settings').style.display = "inline-block";
             document.getElementById('manager-constraints-card').style.display = "block";
@@ -451,25 +473,28 @@
             document.getElementById('manager-grid-interface').style.pointerEvents = "auto";
         }
         renderConstraintsTab();
-        renderDraftGrid(); // רענון תצוגת הפחים (להעלים אם זה עובד)
+        renderDraftGrid(); 
     }
 
     function setupEmployeeDropdowns() {
-        const shiftEmp = document.getElementById('shift-emp');
+        const empListDiv = document.getElementById('shift-emp-list');
         const activeEmpSel = document.getElementById('active-employee-select');
         
-        const currentShiftEmp = shiftEmp.value;
         const currentActiveEmp = activeEmpSel.value;
         
-        shiftEmp.innerHTML = "";
+        empListDiv.innerHTML = "";
         activeEmpSel.innerHTML = "";
 
         state.employees.forEach(emp => {
-            shiftEmp.innerHTML += `<option value="${emp.id}">${emp.name}</option>`;
+            empListDiv.innerHTML += `
+                <label>
+                    <input type="checkbox" class="emp-checkbox" value="${emp.id}">
+                    ${emp.name}
+                </label>
+            `;
             activeEmpSel.innerHTML += `<option value="${emp.id}">${emp.name}</option>`;
         });
 
-        if (currentShiftEmp) shiftEmp.value = currentShiftEmp;
         if (currentActiveEmp) {
             activeEmpSel.value = currentActiveEmp;
             state.activeEmployeeId = currentActiveEmp;
@@ -478,20 +503,88 @@
         }
     }
 
+    function togglePublishAll(source) {
+        checkboxes = document.querySelectorAll('.publish-day-checkbox');
+        for(var i=0, n=checkboxes.length;i<n;i++) {
+            checkboxes[i].checked = source.checked;
+        }
+    }
+
     function addShiftToDraft() {
         if(state.currentRole !== 'manager') return;
-        const empId = document.getElementById('shift-emp').value;
-        const day = document.getElementById('shift-day').value;
-        const start = document.getElementById('shift-start').value;
-        const end = document.getElementById('shift-end').value;
-        const type = document.getElementById('shift-type').value;
-
-        if(!empId) return alert("אנא בחר עובד תחילה");
-
-        // שיבוץ חדש למערך
-        state.draftSchedule[day].push({ empId, start, end, type });
         
+        const selectedEmps = Array.from(document.querySelectorAll('.emp-checkbox:checked')).map(cb => cb.value);
+        const selectedDays = Array.from(document.querySelectorAll('.day-checkbox:checked')).map(cb => cb.value);
+        const selectedTypes = Array.from(document.querySelectorAll('.type-checkbox:checked')).map(cb => cb.value);
+        const role = document.getElementById('shift-role').value;
+
+        if (selectedEmps.length === 0 || selectedDays.length === 0 || selectedTypes.length === 0) {
+            return alert("יש לסמן לפחות עובד אחד, יום אחד וסוג משמרת אחד כדי לבצע שיבוץ.");
+        }
+
+        selectedDays.forEach(day => {
+            selectedTypes.forEach(type => {
+                const start = type === 'morning' ? "08:00" : "16:00";
+                const end = type === 'morning' ? "16:00" : "23:00";
+                
+                selectedEmps.forEach(empId => {
+                    // מניעת שיבוץ כפול של אותו עובד באותה משמרת בדיוק
+                    const exists = state.draftSchedule[day].find(s => s.empId === empId && s.type === type);
+                    if(!exists) {
+                        state.draftSchedule[day].push({ empId, start, end, type, role });
+                    }
+                });
+            });
+        });
+
+        // איפוס בחירת עובדים כדי שיהיה נוח להמשיך
+        document.querySelectorAll('.emp-checkbox').forEach(cb => cb.checked = false);
         saveState();
+    }
+
+    function autoSchedule() {
+        if(!confirm("השיבוץ האוטומטי ינסה להשלים קופאי ומלקט לכל משמרת (בוקר/ערב) בהתבסס על זמינות העובדים (מי שלא כתב אילוץ לאותו יום נחשב פנוי). להמשיך?")) return;
+
+        const rolesNeeded = ["קופאי/ת", "מלקט/ת"];
+        const typesNeeded = ["morning", "evening"];
+        let changesMade = 0;
+
+        daysOfWeek.forEach(day => {
+            typesNeeded.forEach(type => {
+                rolesNeeded.forEach(role => {
+                    // בדיקה האם כבר קיים תפקיד כזה במשמרת זו
+                    const exists = state.draftSchedule[day].find(s => s.type === type && s.role === role);
+                    if(!exists) {
+                        // חיפוש עובד פנוי
+                        const availableEmp = state.employees.find(emp => {
+                            // האם הוא כבר עובד במשמרת הזו?
+                            const workingNow = state.draftSchedule[day].find(s => s.empId === emp.id && s.type === type);
+                            if(workingNow) return false;
+                            
+                            // בדיקת אילוצים - אם תיבת האילוץ ריקה, מניחים שהוא פנוי
+                            const constraint = emp.constraints && emp.constraints[day];
+                            return !constraint || constraint.trim() === '';
+                        });
+                        
+                        if(availableEmp) {
+                            const start = type === 'morning' ? "08:00" : "16:00";
+                            const end = type === 'morning' ? "16:00" : "23:00";
+                            state.draftSchedule[day].push({ 
+                                empId: availableEmp.id, start, end, type, role 
+                            });
+                            changesMade++;
+                        }
+                    }
+                });
+            });
+        });
+
+        if(changesMade > 0) {
+            saveState();
+            alert(`בוצעו ${changesMade} שיבוצים אוטומטיים!`);
+        } else {
+            alert("לא נמצאו עובדים פנויים לשיבוץ או שהסידור כבר מלא.");
+        }
     }
 
     function removeShift(day, index) {
@@ -503,21 +596,30 @@
         const grid = document.getElementById('week-grid-draft');
         grid.innerHTML = "";
 
+        // שמירת הסטטוס הקודם של הצ'קבוקסים לפני הרינדור (למניעת איפוס בעת ריפרש)
+        const checkedStatus = {};
+        document.querySelectorAll('.publish-day-checkbox').forEach(cb => {
+            checkedStatus[cb.value] = cb.checked;
+        });
+
         daysOfWeek.forEach(day => {
             const dayShifts = state.draftSchedule[day] || [];
+            const isChecked = checkedStatus[day] !== undefined ? (checkedStatus[day] ? 'checked' : '') : 'checked';
             
-            const renderShiftsByType = (typeGroup, icon, title) => {
+            const renderShiftsByType = (typeGroup) => {
                 const shifts = dayShifts.map((s, i) => ({...s, originalIndex: i})).filter(s => s.type === typeGroup);
-                if (shifts.length === 0) return '';
+                if (shifts.length === 0) return '<div style="font-size:12px; color:var(--border-color); text-align:center;">אין משובצים</div>';
                 
-                let html = `<div class="shift-section-title">${icon} ${title}</div>`;
+                let html = '';
                 shifts.forEach(shift => {
                     const emp = state.employees.find(e => e.id === shift.empId);
                     html += `
                         <div class="shift-badge">
                             ${state.currentRole === 'manager' ? `<span class="remove-shift" onclick="removeShift('${day}', ${shift.originalIndex})" title="מחק משמרת">🗑️</span>` : ''}
-                            <strong style="margin-right:20px; display:block;">${emp ? emp.name : 'עובד הוסר'}</strong>
-                            <span style="color:var(--text-muted); font-size:12px; margin-right:20px;">${shift.start} - ${shift.end}</span>
+                            <strong style="margin-right:20px; display:block; color:var(--primary-hover);">${emp ? emp.name : 'עובד הוסר'}</strong>
+                            <div style="margin-right:20px; font-size: 13px; margin-top: 3px;">
+                                <span style="background: #e0e7ff; padding: 2px 5px; border-radius: 4px;">${shift.role || 'כללי'}</span>
+                            </div>
                         </div>
                     `;
                 });
@@ -526,17 +628,25 @@
 
             grid.innerHTML += `
                 <div class="day-column">
-                    <div class="day-header">${day}</div>
-                    <div>
-                        ${renderShiftsByType('morning', '☀️', 'בוקר')}
-                        ${renderShiftsByType('evening', '🌙', 'ערב')}
+                    <div class="day-header">
+                        ${day}
+                        ${state.currentRole === 'manager' ? `<label title="סמן לפרסום"><input type="checkbox" class="publish-day-checkbox" value="${day}" ${isChecked}> פרסם</label>` : ''}
+                    </div>
+                    
+                    <div class="shift-period">
+                        <div class="shift-section-title">☀️ משמרת בוקר</div>
+                        ${renderShiftsByType('morning')}
+                    </div>
+                    
+                    <div class="shift-period" style="margin-top: 10px; border-top: 2px dashed var(--border-color); padding-top: 10px;">
+                        <div class="shift-section-title">🌙 משמרת ערב</div>
+                        ${renderShiftsByType('evening')}
                     </div>
                 </div>
             `;
         });
     }
 
-    // מנוע AI לבדיקת חוסרים וכפילויות
     function runAIAssistant(manualClick = false) {
         let missing = [];
         let warnings = [];
@@ -546,11 +656,9 @@
             const morning = shifts.filter(s => s.type === 'morning');
             const evening = shifts.filter(s => s.type === 'evening');
 
-            // בדיקת חוסרים
             if (morning.length === 0 && day !== "שישי") missing.push(`חסר עובד לבוקר ביום ${day}`);
             if (evening.length === 0 && day !== "שישי") missing.push(`חסר עובד לערב ביום ${day}`);
 
-            // בדיקת כפילויות של אותו עובד באותה משמרת בדיוק
             let morningEmps = morning.map(s => s.empId);
             let eveningEmps = evening.map(s => s.empId);
             
@@ -584,25 +692,34 @@
     }
 
     function publishCurrentSchedule() {
+        const daysToPublish = Array.from(document.querySelectorAll('.publish-day-checkbox:checked')).map(cb => cb.value);
+        if(daysToPublish.length === 0) return alert("יש לבחור לפחות יום אחד לפרסום.");
+
         const aiCheck = runAIAssistant(false);
         if (aiCheck.hasIssues) {
-            if(!confirm("🤖 ה-AI זיהה חוסרים או כפילויות בסידור. האם בכל זאת לפרסם אותו?")) return;
+            if(!confirm("🤖 ה-AI זיהה חוסרים או כפילויות בסידור. האם בכל זאת לפרסם את הימים המסומנים?")) return;
         } else {
-            if(!confirm("לפרסם ולנעול את סידור העבודה הנוכחי?")) return;
+            if(!confirm(`לפרסם ולנעול את ${daysToPublish.length} הימים שנבחרו?`)) return;
         }
         
         const timestamp = new Date().toLocaleDateString('he-IL', {hour: '2-digit', minute:'2-digit'});
-        state.publishedSchedule = JSON.parse(JSON.stringify(state.draftSchedule));
+        
+        // יצירת סידור מפורסם במידה ולא קיים, או עדכון רק של הימים שנבחרו
+        if(!state.publishedSchedule) state.publishedSchedule = { "ראשון": [], "שני": [], "שלישי": [], "רביעי": [], "חמישי": [], "שישי": [] };
+        
+        daysToPublish.forEach(day => {
+            state.publishedSchedule[day] = JSON.parse(JSON.stringify(state.draftSchedule[day]));
+        });
         
         state.history.unshift({
             id: Date.now(),
-            date: timestamp,
-            schedule: state.publishedSchedule
+            date: timestamp + ` (פורסם חלקי / מעודכן)`,
+            schedule: JSON.parse(JSON.stringify(state.publishedSchedule))
         });
 
         saveState();
         switchTab('published');
-        alert("הסידור פורסם בהצלחה בענן!");
+        alert("הסידור עבר לפרסום בענן בהצלחה!");
     }
 
     function saveConstraintsWindow() {
@@ -694,7 +811,7 @@
                 const empShifts = dayShifts.filter(s => s.empId === emp.id);
                 
                 if(empShifts.length > 0) {
-                    let text = empShifts.map(s => `${s.type === 'morning' ? '☀️ בוקר' : '🌙 ערב'} (${s.start}-${s.end})`).join('<br><br>');
+                    let text = empShifts.map(s => `<strong>${s.type === 'morning' ? '☀️ בוקר' : '🌙 ערב'}</strong><br>${s.role || ''}`).join('<br><br>');
                     tableHtml += `<td>${text}</td>`;
                 } else {
                     tableHtml += `<td style="color:var(--border-color); text-align:center;">-</td>`;
@@ -724,14 +841,14 @@
                     txt += `  ☀️ *בוקר:* `;
                     txt += morning.map(s => {
                         const emp = state.employees.find(e => e.id === s.empId);
-                        return emp ? emp.name : 'עובד';
+                        return `${emp ? emp.name : 'עובד'} (${s.role})`;
                     }).join(', ') + "\n";
                 }
                 if(evening.length > 0) {
                     txt += `  🌙 *ערב:* `;
                     txt += evening.map(s => {
                         const emp = state.employees.find(e => e.id === s.empId);
-                        return emp ? emp.name : 'עובד';
+                        return `${emp ? emp.name : 'עובד'} (${s.role})`;
                     }).join(', ') + "\n";
                 }
             }
@@ -756,7 +873,7 @@
         state.history.forEach((histItem, hIndex) => {
             container.innerHTML += `
                 <div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; flex-wrap:wrap; gap:10px; justify-content:space-between; align-items:center;">
-                    <div style="color:var(--text-dark);">📅 פורסם בתאריך: <strong>${histItem.date}</strong></div>
+                    <div style="color:var(--text-dark);">📅 <strong>${histItem.date}</strong></div>
                     <button class="btn btn-secondary" style="width:auto; padding:6px 12px; font-size:13px;" onclick="restoreHistoryItem(${hIndex})">שחזר לעריכה (טיוטה)</button>
                 </div>
             `;

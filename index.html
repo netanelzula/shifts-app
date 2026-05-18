@@ -67,6 +67,7 @@
             background-color: var(--bg-main); color: var(--text-main);
             margin: 0; padding: 0; direction: rtl; -webkit-tap-highlight-color: transparent;
             transition: background-color 0.3s, color 0.3s;
+            overflow-x: hidden; /* מניעת גלילה רוחבית ברמת האתר */
         }
 
         *:focus-visible { outline: 3px solid var(--cyan-accent); outline-offset: 2px; }
@@ -84,17 +85,43 @@
         .header-subtitle { font-size: 13px; color: var(--text-muted); }
         .status-badge { background-color: rgba(16, 185, 129, 0.2); color: #34d399; padding: 6px 12px; border-radius: 20px; font-size: 13px; border: 1px solid #059669; display: flex; align-items: center; gap: 5px; }
 
-        .nav-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 15px; border-bottom: 1px solid var(--border-color); background-color: var(--bg-main); }
-        .tab-btn { flex: 1; min-width: 120px; justify-content: center; background: transparent; border: 1px solid var(--border-color); padding: 10px; font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; border-radius: 12px; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+        /* לשוניות - מותאמות למניעת גלילה רוחבית לחלוטין */
+        .nav-tabs { 
+            display: flex; 
+            flex-direction: row;
+            justify-content: space-between; 
+            gap: 5px; 
+            padding: 10px 15px; 
+            border-bottom: 1px solid var(--border-color); 
+            background-color: var(--bg-main); 
+        }
+        .tab-btn { 
+            flex: 1; 
+            text-align: center;
+            background: transparent; 
+            border: 1px solid var(--border-color); 
+            padding: 10px 4px; 
+            font-size: 13px; 
+            font-weight: 600; 
+            color: var(--text-muted); 
+            cursor: pointer; 
+            border-radius: 10px; 
+            transition: all 0.2s; 
+            display: flex; 
+            flex-direction: column; /* הצגת האייקון מעל הטקסט במובייל לחסכון במקום */
+            align-items: center; 
+            gap: 2px;
+            white-space: nowrap;
+        }
         .tab-btn:hover { background-color: rgba(124, 58, 237, 0.1); color: var(--text-main); }
-        .tab-btn.active { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3); }
+        .tab-btn.active { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2); }
 
-        .container { max-width: 1400px; margin: 20px auto; padding: 0 15px; }
+        .container { max-width: 1400px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
         .view-content { display: none; }
         .view-content.active { display: block; }
         .grid-layout { display: grid; grid-template-columns: 1.2fr 3fr; gap: 20px; }
 
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-sizing: border-box; }
         .card-title { font-size: 18px; font-weight: 600; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
 
         .form-group { margin-bottom: 15px; }
@@ -105,7 +132,7 @@
         .checkbox-list label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer; color: var(--text-main); }
         .checkbox-list input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); cursor: pointer; }
 
-        .btn { background-color: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 15px; transition: background 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn { background-color: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 15px; transition: background 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-sizing: border-box; }
         .btn:hover { background-color: var(--primary-hover); }
         .btn-success { background-color: var(--success); }
         .btn-danger { background-color: var(--danger); }
@@ -118,18 +145,18 @@
         .ai-command-bar button { background: var(--primary); border: none; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .ai-command-bar button.mic-btn { background: transparent; border: 1px solid var(--primary); font-size: 18px; }
 
-        .week-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
-        .day-column { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; }
+        /* גריד שבועי - רספונסיבי לחלוטין */
+        .week-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; width: 100%; box-sizing: border-box; }
+        .day-column { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; }
         .day-header { text-align: center; font-weight: bold; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 16px; }
         
-        .shift-period { padding: 8px; border-radius: 12px; margin-bottom: 10px; min-height: 50px; transition: all 0.3s ease; border: 2px solid transparent;}
+        .shift-period { padding: 8px; border-radius: 12px; margin-bottom: 10px; min-height: 50px; transition: all 0.3s ease; border: 2px solid transparent; }
         .shift-period.morning { background: var(--morning-bg); border-color: rgba(217, 119, 6, 0.3); }
         .shift-period.evening { background: var(--evening-bg); border-color: #312e81; }
         .shift-period.vacation { background: var(--vacation-bg); border-color: var(--border-color); }
         .shift-period.sick { background: var(--sick-bg); border-color: var(--danger); }
         body.light-mode .shift-period.evening { border-color: #a5b4fc; }
 
-        /* התראת חוסר במשמרת */
         .shift-period.shift-shortage {
             border-color: var(--danger) !important;
             background: rgba(239, 68, 68, 0.15) !important;
@@ -144,50 +171,99 @@
         .vacation .shift-section-title { color: #9ca3af; }
         .sick .shift-section-title { color: var(--danger); }
 
-        .shift-badge { background: var(--badge-bg); border: 1px dashed var(--border-color); padding: 8px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; position: relative; cursor: grab; transition: background 0.2s; display: flex; align-items: center; gap: 10px; padding-top: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);}
+        .shift-badge { background: var(--badge-bg); border: 1px dashed var(--border-color); padding: 8px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; position: relative; cursor: grab; transition: background 0.2s; display: flex; align-items: center; gap: 10px; padding-top: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); box-sizing: border-box; }
         .role-tag { font-size: 11px; background: var(--input-bg); padding: 2px 6px; border-radius: 4px; color: var(--cyan-accent); margin-top: 4px; display: inline-block; border: 1px solid var(--border-color); }
+
+        .group-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .group-box { background: var(--group-box-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; min-height: 200px; box-sizing: border-box; }
+
+        .time-picker-wrapper { display: flex; align-items: center; gap: 8px; background: var(--input-bg); padding: 5px 10px; border-radius: 10px; border: 1px solid var(--border-color); flex:1;}
+        .time-picker-wrapper input[type="time"] { background: transparent; color: var(--text-main); border: none; font-size: 14px; outline: none; cursor: pointer; flex: 1; text-align: left; direction: ltr; }
 
         /* עיצוב הגדרות מיוחד לסליידרים */
         .settings-header-box { text-align: right; margin-bottom: 25px; }
         .settings-header-box h2 { margin: 0 0 5px 0; color: var(--text-main); font-size: 22px; font-weight:bold; }
         .settings-header-box p { margin: 0; color: var(--text-muted); font-size: 14px; }
-        
-        .settings-card-dark { background: #22184c; border-radius: 12px; padding: 20px; border: 1px solid #372a6d; margin-bottom: 20px; color: #fff; }
+        .settings-card-dark { background: #22184c; border-radius: 12px; padding: 20px; border: 1px solid #372a6d; margin-bottom: 20px; color: #fff; box-sizing: border-box; }
         body.light-mode .settings-card-dark { background: #ffffff; border-color: var(--border-color); color: var(--text-main); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-
         .settings-shift-title { display: flex; align-items: center; gap: 8px; font-size: 18px; margin: 0 0 15px 0; font-weight: bold; border-bottom: 1px solid #372a6d; padding-bottom: 10px; }
         body.light-mode .settings-shift-title { border-color: var(--border-color); color: var(--text-main); }
-        
         .role-settings-box { margin-bottom: 20px; }
         .role-settings-box h5 { font-size: 16px; margin: 0 0 12px 0; color: var(--text-main); }
-        
         .slider-row { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 12px; }
         .slider-label { width: 70px; text-align: right; font-size: 14px; color: #a19fc1; }
         body.light-mode .slider-label { color: var(--text-muted); }
-        
         .slider-val-box { width: 45px; height: 35px; background: #1c113b; border: 1px solid #372a6d; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; color:white; }
         body.light-mode .slider-val-box { background: var(--input-bg); border-color: var(--border-color); color: var(--text-main); }
-
         .custom-slider { flex: 1; -webkit-appearance: none; background: transparent; direction: ltr;}
         .custom-slider::-webkit-slider-runnable-track { width: 100%; height: 6px; background: #372a6d; border-radius: 3px; }
         body.light-mode .custom-slider::-webkit-slider-runnable-track { background: #e2e8f0; }
         .custom-slider::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #a855f7; cursor: pointer; margin-top: -6px; box-shadow: 0 0 8px rgba(168,85,247,0.6); }
 
-        .time-picker-wrapper { display: flex; align-items: center; gap: 8px; background: var(--input-bg); padding: 5px 10px; border-radius: 10px; border: 1px solid var(--border-color); flex:1;}
-        .time-picker-wrapper input[type="time"] { background: transparent; color: var(--text-main); border: none; font-size: 14px; outline: none; cursor: pointer; flex: 1; text-align: left; direction: ltr; }
-
-        .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); }
+        /* טבלה רספונסיבית */
+        .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); width: 100%; box-sizing: border-box; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th, td { border: 1px solid var(--border-color); padding: 12px; text-align: right; }
         th { background-color: var(--primary); color: white; }
         td { background-color: var(--card-bg); font-size: 14px; vertical-align: top; }
 
-        .top-controls-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px; flex-wrap: wrap; gap: 15px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); }
+        .top-controls-bar { display: flex; justify-content: space-between; align-items: center; padding: 15px; flex-wrap: wrap; gap: 15px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); box-sizing: border-box; }
         
         #manager-app-interface { display: none; } 
 
-        @media (max-width: 1024px) { .grid-layout { grid-template-columns: 1fr; } .week-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 768px) { header { flex-direction: column; align-items: stretch; gap: 15px; text-align: center; } .header-title-box { align-items: center; } .week-grid { grid-template-columns: 1fr; } .top-controls-bar { flex-direction: column; align-items: stretch; } .time-picker-wrapper { flex-direction: column; } }
+        /* --- התאמה מקיפה למובייל וסמארטפון (MEDIA QUERIES) --- */
+        @media (max-width: 1024px) { 
+            .grid-layout { grid-template-columns: 1fr; } 
+            .week-grid { grid-template-columns: repeat(2, 1fr); } 
+            .group-container { grid-template-columns: 1fr; } 
+        }
+
+        @media (max-width: 768px) { 
+            header { flex-direction: column; align-items: stretch; gap: 12px; text-align: center; padding: 10px; } 
+            .header-title-box { align-items: center; }
+            
+            /* מניעת גלילה רוחבית בלשוניות - שינוי סידור להופעה מלאה וצפופה */
+            .nav-tabs { 
+                padding: 5px; 
+                gap: 3px; 
+            }
+            .tab-btn { 
+                min-width: 0; 
+                font-size: 11px; 
+                padding: 6px 2px;
+                border-radius: 8px;
+            }
+            
+            /* הפיכת הלוח השבועי לטור אנכי קריא ומלא ללא גלילה לצד */
+            .week-grid { 
+                grid-template-columns: 1fr !important; 
+                gap: 15px;
+            }
+            
+            .top-controls-bar { flex-direction: column; align-items: stretch; padding: 10px; } 
+            .time-picker-wrapper { flex-direction: column; align-items: stretch; }
+            
+            /* התאמת הטבלה הסופית שאינה רספונסיבית במקור למבנה כרטיסיות במובייל */
+            .table-responsive table, .table-responsive thead, .table-responsive tbody, .table-responsive th, .table-responsive td, .table-responsive tr { 
+                display: block; 
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+            .table-responsive thead { display: none; } /* הסתרת כותרת הטבלה הרחבה */
+            .table-responsive tr { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; background: var(--card-bg); }
+            .table-responsive td { text-align: right; border: none; border-bottom: 1px dashed var(--border-color); padding: 8px 4px; position: relative; }
+            .table-responsive td:last-child { border-bottom: none; }
+            .table-responsive td::before { font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
+            
+            /* הוספת זיהוי דינמי של כותרות הימים במובייל */
+            .table-responsive td:nth-of-type(1)::before { content: "עובד/ת:"; }
+            .table-responsive td:nth-of-type(2)::before { content: "יום ראשון:"; }
+            .table-responsive td:nth-of-type(3)::before { content: "יום שני:"; }
+            .table-responsive td:nth-of-type(4)::before { content: "יום שלישי:"; }
+            .table-responsive td:nth-of-type(5)::before { content: "יום רביעי:"; }
+            .table-responsive td:nth-of-type(6)::before { content: "יום חמישי:"; }
+            .table-responsive td:nth-of-type(7)::before { content: "יום שישי:"; }
+        }
     </style>
 </head>
 <body>
@@ -281,18 +357,18 @@
 
     <div class="top-controls-bar">
         <div style="display: flex; align-items: center; gap: 10px;">
-            <label style="color:var(--text-muted); font-size: 14px; font-weight:bold;">📅 בחר תאריך לסידור:</label>
+            <label style="color:var(--text-muted); font-size: 14px; font-weight:bold;">📅 בחר תאריך:</label>
             <input type="date" id="schedule-date-picker" class="form-control" style="width:160px; padding:8px;" onchange="handleDateChange()">
         </div>
     </div>
 
     <nav class="nav-tabs" id="main-nav-tabs">
-        <button class="tab-btn active" id="tab-build" onclick="switchTab('build')">🗓️ לוח משמרות</button>
-        <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')">👥 עובדים</button>
-        <button class="tab-btn" id="tab-constraints" onclick="switchTab('constraints')">🔒 אילוצים</button>
-        <button class="tab-btn" id="tab-hr" onclick="switchTab('hr')">📊 כח אדם (HR)</button>
-        <button class="tab-btn" id="tab-config" onclick="switchTab('config')">⚙️ הגדרות</button>
-        <button class="tab-btn" id="tab-published" onclick="switchTab('published')">📜 היסטוריה</button>
+        <button class="tab-btn active" id="tab-build" onclick="switchTab('build')"><span>🗓️</span><span>לוח</span></button>
+        <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')"><span>👥</span><span>עובדים</span></button>
+        <button class="tab-btn" id="tab-constraints" onclick="switchTab('constraints')"><span>🔒</span><span>אילוצים</span></button>
+        <button class="tab-btn" id="tab-hr" onclick="switchTab('hr')"><span>📊</span><span>כח אדם</span></button>
+        <button class="tab-btn" id="tab-config" onclick="switchTab('config')"><span>⚙️</span><span>הגדרות</span></button>
+        <button class="tab-btn" id="tab-published" onclick="switchTab('published')"><span>📜</span><span>ארכיון</span></button>
     </nav>
 
     <div class="container">
@@ -380,7 +456,6 @@
                 
                 <div class="settings-card-dark">
                     <div class="settings-shift-title"><span style="color:#fbbf24;">☀️</span> משמרת בוקר</div>
-                    
                     <div class="role-settings-box">
                         <h5>קופאית</h5>
                         <div class="slider-row">
@@ -394,7 +469,6 @@
                             <div class="slider-label">מקסימום</div>
                         </div>
                     </div>
-
                     <div class="role-settings-box">
                         <h5>מלקטת</h5>
                         <div class="slider-row">
@@ -412,7 +486,6 @@
 
                 <div class="settings-card-dark">
                     <div class="settings-shift-title"><span style="color:#818cf8;">🌙</span> משמרת ערב</div>
-                    
                     <div class="role-settings-box">
                         <h5>קופאית</h5>
                         <div class="slider-row">
@@ -426,7 +499,6 @@
                             <div class="slider-label">מקסימום</div>
                         </div>
                     </div>
-
                     <div class="role-settings-box">
                         <h5>מלקטת</h5>
                         <div class="slider-row">
@@ -441,7 +513,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -455,7 +526,7 @@
                         <label>שיוך קבוצה צוותית</label>
                         <select id="new-emp-group" class="form-control">
                             <option value="קופאיות">קופאיות</option>
-                            <option value="malkatot">מלקטות</option>
+                            <option value="malkatot">malkatot</option>
                         </select>
                     </div>
                     <button class="btn" onclick="addEmployee()">שמור עובד</button>
@@ -473,13 +544,13 @@
                             <button class="btn btn-info" style="width:auto; padding:6px 15px; font-size:13px;" onclick="moveSelectedGroups('malkatot')">העבר מסומנים למלקטות ➡️</button>
                         </div>
                     </div>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="group-container">
                         <div class="group-box" id="dropzone-cashiers" ondragover="allowDropGroup(event)" ondrop="dropToGroup(event, 'קופאיות')">
-                            <h4 style="margin-top:0; color:var(--cyan-accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">🛒 קופאיות</h4>
+                            <h4>🛒 קופאיות</h4>
                             <div id="group-cashiers-list"></div>
                         </div>
                         <div class="group-box" id="dropzone-pickers" ondragover="allowDropGroup(event)" ondrop="dropToGroup(event, 'malkatot')">
-                            <h4 style="margin-top:0; color:var(--cyan-accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">📦 מלקטות</h4>
+                            <h4>📦 מלקטות</h4>
                             <div id="group-pickers-list"></div>
                         </div>
                     </div>
@@ -490,13 +561,11 @@
         <div id="view-constraints" class="view-content">
             <div class="card" id="manager-constraints-card">
                 <h3 class="card-title">⚙️ ניהול ועריכת אילוצים (מנהל)</h3>
-                
                 <div style="background:var(--input-bg); border:1px solid var(--primary); padding:15px; border-radius:12px; margin-bottom:20px;">
-                    <label style="font-weight:bold; color:var(--text-main); margin-bottom:10px; display:block;">בחר עובד לעריכת האילוצים שלו:</label>
+                    <label style="font-weight:bold; margin-bottom:10px; display:block;">בחר עובד לעריכת האילוצים שלו:</label>
                     <select id="manager-edit-emp-constraint" class="form-control" onchange="renderConstraintsTab()"></select>
                     <button class="btn btn-warning" style="margin-top: 15px; width:auto;" onclick="aiOptimizeEmployeeConstraints()">🤖 התאם אילוצים לצרכי המערכת (AI)</button>
                 </div>
-
                 <div id="manager-constraints-config" class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 15px;">
                     <div class="form-group"><label>תאריך ושעת פתיחה לתזמון כללי</label><input type="datetime-local" id="const-open-date" class="form-control" onchange="saveConstraintsWindow()"></div>
                     <div class="form-group"><label>תאריך ושעת סגירה לתזמון כללי</label><input type="datetime-local" id="const-close-date" class="form-control" onchange="saveConstraintsWindow()"></div>
@@ -762,7 +831,6 @@
                 });
             });
         });
-
         if(!hasError) document.querySelectorAll('.emp-checkbox').forEach(cb => cb.checked = false); 
         saveState();
     }
@@ -779,7 +847,6 @@
                     const shiftObj = type === 'morning' ? state.settings.minMax.morning : state.settings.minMax.evening;
                     const roleEn = role === "קופאי/ת" ? "cashiers" : "pickers";
                     const targetMin = shiftObj[roleEn].min;
-                    
                     const currentCount = (state.draftSchedule[day] || []).filter(s => s.type === type && s.role === role).length;
                     
                     if(currentCount < targetMin) {
@@ -787,10 +854,8 @@
                             const targetGroup = role === "קופאי/ת" ? "קופאיות" : "malkatot";
                             const availableEmp = state.employees.find(emp => {
                                 if(emp.group !== targetGroup) return false;
-                                
                                 const start = type==='morning' ? "07:00" : "15:00"; const end = type==='morning' ? "15:00" : "22:00";
                                 if(hasOverlap(day, emp.id, start, end)) return false; 
-                                
                                 const constraint = emp.constraints && emp.constraints[day];
                                 if(constraint === 'חופש' || constraint === 'sick') return false;
                                 if(type === 'morning' && constraint === 'ערב') return false;
@@ -798,8 +863,7 @@
                                 return true;
                             });
                             if(availableEmp) {
-                                const start = type==='morning' ? "07:00" : "15:00"; const end = type==='morning' ? "15:00" : "22:00";
-                                state.draftSchedule[day].push({ empId: availableEmp.id, start: start, end: end, type, role });
+                                state.draftSchedule[day].push({ empId: availableEmp.id, start: type==='morning'?"07:00":"15:00", end: type==='morning'?"15:00":"22:00", type, role });
                                 changesMade++;
                             }
                         }
@@ -835,10 +899,10 @@
         else if (type === 'max' && val < st.min) { val = st.min; document.getElementById(`slider-${shift}-${role}-${type}`).value = val; }
         st[type] = val;
         document.getElementById(`val-${shift}-${role}-${type}`).innerText = val;
-        saveState(); renderDraftGrid(); // עדכון מיידי של האדום בלוח
+        saveState(); renderDraftGrid();
     }
 
-    /* --- מודלים של עריכה (חלונות צפים) --- */
+    /* --- מודלים של עריכה --- */
     function openModal(id) { document.getElementById(id).style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
@@ -934,7 +998,6 @@
         daysOfWeek.forEach((day) => {
             const dayShifts = state.draftSchedule[day] || [];
             
-            // בדיקת חוסרים לפי ההגדרות
             const mC_min = state.settings.minMax.morning.cashiers.min;
             const mP_min = state.settings.minMax.morning.pickers.min;
             const mC_count = dayShifts.filter(s => s.type === 'morning' && s.role.includes('קופאי')).length;
@@ -1108,38 +1171,25 @@
         
         let targetEmpId = currentUser.role === 'employee' ? currentUser.id : document.getElementById('manager-edit-emp-constraint')?.value;
         const targetEmp = state.employees.find(e => e.id === targetEmpId);
-        
         const inputsGrid = document.getElementById('constraints-week-inputs'); inputsGrid.innerHTML = "";
         
         if(targetEmp) {
             document.getElementById('constraints-action-title').innerText = currentUser.role === 'employee' ? `הגשת אילוצים עבורך` : `עריכת אילוצים עבור: ${targetEmp.name}`;
-            
-            const options = [
-                {val: "", text: "פנוי/ה לכל משמרת (ברירת מחדל)"},
-                {val: "בוקר", text: "רק משמרת בוקר"},
-                {val: "ערב", text: "רק משמרת ערב"},
-                {val: "חופש", text: "חופש מוחלט"},
-                {val: "sick", text: "מחלה"}
-            ];
+            const options = [{val: "", text: "פנוי/ה לכל משמרת"}, {val: "בוקר", text: "רק משמרת בוקר"}, {val: "ערב", text: "רק משמרת ערב"}, {val: "חופש", text: "חופש מוחלט"}, {val: "sick", text: "מחלה"}];
 
             daysOfWeek.forEach(day => {
                 const existingValue = (targetEmp.constraints && targetEmp.constraints[day]) ? targetEmp.constraints[day] : "";
                 let selectHtml = `<select id="const-input-${day}" class="form-control">`;
                 options.forEach(opt => { selectHtml += `<option value="${opt.val}" ${existingValue === opt.val ? 'selected' : ''}>${opt.text}</option>`; });
                 selectHtml += `</select>`;
-
-                inputsGrid.innerHTML += `
-                    <div style="background:var(--input-bg); padding:12px; border-radius:12px; border:1px solid var(--border-color)"><strong style="display:block; margin-bottom:8px; color: var(--primary);">יום ${day}</strong>${selectHtml}</div>
-                `;
+                inputsGrid.innerHTML += `<div style="background:var(--input-bg); padding:12px; border-radius:12px; border:1px solid var(--border-color)"><strong style="display:block; margin-bottom:8px; color: var(--primary);">יום ${day}</strong>${selectHtml}</div>`;
             });
         }
     }
 
     function saveEmployeeConstraints() {
         let targetEmpId = currentUser.role === 'employee' ? currentUser.id : document.getElementById('manager-edit-emp-constraint')?.value;
-        const activeEmp = state.employees.find(e => e.id === targetEmpId);
-        if(!activeEmp) return alert("לא נבחר עובד לשמירה.");
-        
+        const activeEmp = state.employees.find(e => e.id === targetEmpId); if(!activeEmp) return alert("לא נבחר עובד לשמירה.");
         if (!activeEmp.constraints) activeEmp.constraints = {};
         daysOfWeek.forEach(day => activeEmp.constraints[day] = document.getElementById(`const-input-${day}`).value);
         saveState(); alert(`האילוצים עבור ${activeEmp.name} נשמרו במערכת בהצלחה!`);
@@ -1147,29 +1197,15 @@
 
     function aiOptimizeEmployeeConstraints() {
         const targetEmpId = document.getElementById('manager-edit-emp-constraint').value;
-        const emp = state.employees.find(e => e.id === targetEmpId);
-        if(!emp) return;
-        
+        const emp = state.employees.find(e => e.id === targetEmpId); if(!emp) return;
         let changed = false;
-        daysOfWeek.forEach(day => {
-            if(emp.constraints && emp.constraints[day]) {
-                if(emp.constraints[day] === 'בוקר' || emp.constraints[day] === 'ערב' || emp.constraints[day] === 'חופש') {
-                    emp.constraints[day] = ''; 
-                    changed = true;
-                }
-            }
-        });
-        
-        if(changed) {
-            saveState(); renderConstraintsTab();
-            alert(`🤖 AI: חלק מהאילוצים של ${emp.name} אופסו כדי לאפשר גמישות וסגירת חוסרים במערכת!`);
-        } else { alert(`🤖 AI: אין צורך בשינוי, אילוצי העובד לא מפריעים כרגע לשיבוץ.`); }
+        daysOfWeek.forEach(day => { if(emp.constraints && emp.constraints[day]) { if(emp.constraints[day] === 'בוקר' || emp.constraints[day] === 'ערב' || emp.constraints[day] === 'חופש') { emp.constraints[day] = ''; changed = true; } } });
+        if(changed) { saveState(); renderConstraintsTab(); alert(`🤖 AI: חלק מהאילוצים של ${emp.name} אופסו כדי למנוע חוסרים במערכת!`); } else { alert(`🤖 AI: אין צורך בשינוי, אילוצי העובד לא מפריעים.`); }
     }
 
     function generateHRReport() {
         let dailyHtml = `<h4 style="color:var(--primary); border-bottom:1px solid var(--border-color); padding-bottom:5px;">סיכום יומי לפי יעדי הגדרות:</h4>`;
-        let totalMorning = 0, totalEvening = 0, totalVacation = 0, totalSick = 0;
-        let weeklyShortages = 0;
+        let totalMorning = 0, totalEvening = 0, totalVacation = 0, totalSick = 0; let weeklyShortages = 0;
 
         daysOfWeek.forEach(day => {
             const shifts = state.draftSchedule[day] || [];
@@ -1177,21 +1213,14 @@
             const m_p = shifts.filter(s => s.type === 'morning' && s.role.includes('מלקט')).length;
             const e_c = shifts.filter(s => s.type === 'evening' && s.role.includes('קופאי')).length;
             const e_p = shifts.filter(s => s.type === 'evening' && s.role.includes('מלקט')).length;
-
-            const vacation = shifts.filter(s => s.type === 'vacation').length;
-            const sick = shifts.filter(s => s.type === 'sick').length;
-
+            const vacation = shifts.filter(s => s.type === 'vacation').length; const sick = shifts.filter(s => s.type === 'sick').length;
             totalMorning += (m_c + m_p); totalEvening += (e_c + e_p); totalVacation += vacation; totalSick += sick;
 
-            let shortage = 0;
-            const sm = state.settings.minMax.morning;
-            const se = state.settings.minMax.evening;
-            
+            let shortage = 0; const sm = state.settings.minMax.morning; const se = state.settings.minMax.evening;
             if (m_c < sm.cashiers.min) shortage += (sm.cashiers.min - m_c);
             if (m_p < sm.pickers.min) shortage += (sm.pickers.min - m_p);
             if (e_c < se.cashiers.min) shortage += (se.cashiers.min - e_c);
             if (e_p < se.pickers.min) shortage += (se.pickers.min - e_p);
-            
             weeklyShortages += shortage;
 
             dailyHtml += `<div style="background:var(--input-bg); border:1px solid var(--border-color); padding:10px; margin-bottom:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:5px;">
@@ -1204,11 +1233,11 @@
         let weeklyHtml = `<h4 style="color:var(--primary); border-bottom:1px solid var(--border-color); padding-bottom:5px; margin-top:20px;">סיכום שבועי מול תקן נדרש:</h4>
             <div style="background:var(--input-bg); border:1px solid var(--border-color); padding:15px; border-radius:8px;">
                 <ul style="margin:0; padding-right:20px; list-style-type:circle;">
-                    <li style="margin-bottom:8px;">סה"כ משמרות בוקר: <strong style="color:var(--text-main);">${totalMorning}</strong></li>
-                    <li style="margin-bottom:8px;">סה"כ משמרות ערב: <strong style="color:var(--text-main);">${totalEvening}</strong></li>
-                    <li style="margin-bottom:8px;">סה"כ עובדים בחופש השבוע: <strong style="color:var(--text-main);">${totalVacation}</strong></li>
-                    <li style="margin-bottom:8px;">סה"כ עובדים במחלה השבוע: <strong style="color:var(--danger);">${totalSick}</strong></li>
-                    <li style="margin-top:12px; padding-top:12px; border-top:1px dashed var(--border-color);">סה"כ חוסרים להשלמה (תקן מינימום שבועי): <strong style="font-size:18px; color:${weeklyShortages>0 ? 'var(--danger)' : 'var(--success)'};">${weeklyShortages} עובדים</strong></li>
+                    <li style="margin-bottom:8px;">☀️ סה"כ בוקר: <strong>${totalMorning}</strong></li>
+                    <li style="margin-bottom:8px;">🌙 סה"כ ערב: <strong>${totalEvening}</strong></li>
+                    <li style="margin-bottom:8px;">🏖️ חופשים: <strong>${totalVacation}</strong></li>
+                    <li style="margin-bottom:8px;">🤒 מחלות: <strong style="color:var(--danger);">${totalSick}</strong></li>
+                    <li style="margin-top:12px; padding-top:12px; border-top:1px dashed var(--border-color);">סה"כ חוסרים להשלמה: <strong style="font-size:18px; color:${weeklyShortages>0 ? 'var(--danger)' : 'var(--success)'};">${weeklyShortages} עובדים</strong></li>
                 </ul>
             </div>`;
         document.getElementById('hr-report-content').innerHTML = dailyHtml + weeklyHtml;
@@ -1223,11 +1252,7 @@
             daysOfWeek.forEach(day => {
                 const empShifts = (state.publishedSchedule[day] || []).filter(s => s.empId === emp.id);
                 if(empShifts.length > 0) {
-                    let text = empShifts.map(s => {
-                        if(s.type === 'vacation') return '🏖️ חופש';
-                        if(s.type === 'sick') return '<span style="color:var(--danger);">🤒 מחלה</span>';
-                        return `<span>${s.type==='morning'?'☀️ בוקר':'🌙 ערב'}</span><br><span style="font-size:11px; color:gray;">${s.role} (${s.start}-${s.end})</span>`;
-                    }).join('<br><br>');
+                    let text = empShifts.map(s => { if(s.type === 'vacation') return '🏖️ חופש'; if(s.type === 'sick') return '<span style="color:var(--danger);">🤒 מחלה</span>'; return `<span>${s.type==='morning'?'☀️ בוקר':'🌙 ערב'}</span><br><span style="font-size:11px; color:gray;">${s.role} (${s.start}-${s.end})</span>`; }).join('<br><br>');
                     tableHtml += `<td>${text}</td>`;
                 } else tableHtml += `<td style="color:#4b5563; text-align:center;">-</td>`;
             });
@@ -1249,39 +1274,34 @@
                 if(sick.length > 0) txt += `  🤒 מחלה: ` + sick.map(s => `${state.employees.find(e => e.id === s.empId)?.name || ''}`).join(', ') + "\n"; txt += "\n";
             }
         });
-        navigator.clipboard.writeText(txt).then(() => alert("הסידור הועתק לקליפבורד! מוכן להדבקה בוואטסאפ."));
+        navigator.clipboard.writeText(txt).then(() => alert("הסידור הועתק לקליפבורד!"));
     }
 
     function renderHistory() {
         const container = document.getElementById('history-list-container');
-        if(state.history.length === 0) { container.innerHTML = `<p style="font-size:14px; color:var(--text-muted)">אין ארכיון זמין.</p>`; return; }
+        if(state.history.length === 0) { container.innerHTML = `<p style="text-align:center; padding:20px;">אין ארכיון זמין.</p>`; return; }
         container.innerHTML = "";
-        state.history.forEach((histItem, hIndex) => { container.innerHTML += `<div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;"><div>📅 סידור שננעל בתאריך: <strong>${histItem.date}</strong></div><button class="btn btn-outline" style="width:auto; padding:6px 12px; font-size:13px;" onclick="restoreHistoryItem(${hIndex})">שחזר ללוח העבודה</button></div>`; });
+        state.history.forEach((histItem, hIndex) => { container.innerHTML += `<div style="padding:15px; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;"><div>📅 סידור שננעל: <strong>${histItem.date}</strong></div><button class="btn btn-outline" style="width:auto; padding:6px 12px; font-size:13px;" onclick="restoreHistoryItem(${hIndex})">שחזר ללוח</button></div>`; });
     }
-
     function restoreHistoryItem(index) { if(!confirm("לשחזר את השבוע הנבחר?")) return; const loaded = JSON.parse(JSON.stringify(state.history[index].schedule)); daysOfWeek.forEach(d => state.draftSchedule[d] = loaded[d] || []); saveState(); switchTab('build'); }
 
-    /* --- פקודות AI --- */
+    /* --- מערכת פקודות AI --- */
     let recognition;
     function initSpeechRecognition() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (SpeechRecognition) {
             recognition = new SpeechRecognition(); recognition.lang = 'he-IL';
-            recognition.onresult = function(event) { document.getElementById('ai-command-input').value = event.results[0][0].transcript; executeAITextCommand(); document.getElementById('ai-mic-btn').classList.remove('recording'); };
-            recognition.onerror = recognition.onend = function() { document.getElementById('ai-mic-btn').classList.remove('recording'); };
+            recognition.onresult = function(event) { document.getElementById('ai-command-input').value = event.results[0][0].transcript; executeAITextCommand(); };
         }
     }
-    function toggleVoiceRecognition() {
-        if(!recognition) return alert("זיהוי קולי אינו נתמך בדפדפן זה."); const btn = document.getElementById('ai-mic-btn');
-        if(btn.classList.contains('recording')) { recognition.stop(); btn.classList.remove('recording'); } else { recognition.start(); btn.classList.add('recording'); }
-    }
+    function toggleVoiceRecognition() { if(!recognition) return alert("זיהוי קולי אינו נתמך בדפדפן זה."); recognition.start(); }
     function executeAITextCommand() {
         const input = document.getElementById('ai-command-input').value.trim(); if(!input) return;
         if (input.includes('אילוצים')) {
             if (input.includes('פתח') || input.includes('תפתח')) { openConstraintsToWednesday(); document.getElementById('ai-command-input').value = ''; return; }
             if (input.includes('סגור') || input.includes('תסגור')) { closeConstraintsNow(); document.getElementById('ai-command-input').value = ''; return; }
         }
-        alert("🤖 AI: ניתן להקליד 'תפתח אילוצים' או 'תסגור אילוצים'.");
+        alert("🤖 AI: לא זיהיתי את הפקודה המדויקת.");
     }
 
     window.onload = () => { init(); initSpeechRecognition(); };

@@ -67,14 +67,14 @@
             background-color: var(--bg-main); color: var(--text-main);
             margin: 0; padding: 0; direction: rtl; -webkit-tap-highlight-color: transparent;
             transition: background-color 0.3s, color 0.3s;
-            overflow-x: hidden; /* מניעת גלילה רוחבית ברמת האתר */
+            overflow-x: hidden; 
         }
 
         *:focus-visible { outline: 3px solid var(--cyan-accent); outline-offset: 2px; }
         input[type="time"], input[type="date"], input[type="datetime-local"] { color-scheme: var(--color-scheme); }
 
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; }
-        .modal-box { background: var(--card-bg); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color); width: 90%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: var(--text-main); }
+        .modal-box { background: var(--card-bg); padding: 25px; border-radius: 16px; border: 1px solid var(--border-color); width: 90%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); color: var(--text-main); box-sizing: border-box;}
 
         #login-overlay { z-index: 9999; }
 
@@ -85,22 +85,23 @@
         .header-subtitle { font-size: 13px; color: var(--text-muted); }
         .status-badge { background-color: rgba(16, 185, 129, 0.2); color: #34d399; padding: 6px 12px; border-radius: 20px; font-size: 13px; border: 1px solid #059669; display: flex; align-items: center; gap: 5px; }
 
-        /* לשוניות - מותאמות למניעת גלילה רוחבית לחלוטין */
+        /* לשוניות - הותאם לגלוי מלא (ללא גלילה) בעזרת flex-wrap */
         .nav-tabs { 
             display: flex; 
-            flex-direction: row;
-            justify-content: space-between; 
-            gap: 5px; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 8px; 
             padding: 10px 15px; 
             border-bottom: 1px solid var(--border-color); 
             background-color: var(--bg-main); 
         }
         .tab-btn { 
-            flex: 1; 
+            flex: 1 1 auto; 
+            min-width: 85px; 
             text-align: center;
             background: transparent; 
             border: 1px solid var(--border-color); 
-            padding: 10px 4px; 
+            padding: 8px 5px; 
             font-size: 13px; 
             font-weight: 600; 
             color: var(--text-muted); 
@@ -108,10 +109,9 @@
             border-radius: 10px; 
             transition: all 0.2s; 
             display: flex; 
-            flex-direction: column; /* הצגת האייקון מעל הטקסט במובייל לחסכון במקום */
+            flex-direction: column; 
             align-items: center; 
-            gap: 2px;
-            white-space: nowrap;
+            gap: 4px;
         }
         .tab-btn:hover { background-color: rgba(124, 58, 237, 0.1); color: var(--text-main); }
         .tab-btn.active { background-color: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2); }
@@ -119,7 +119,13 @@
         .container { max-width: 1400px; margin: 20px auto; padding: 0 15px; box-sizing: border-box; }
         .view-content { display: none; }
         .view-content.active { display: block; }
-        .grid-layout { display: grid; grid-template-columns: 1.2fr 3fr; gap: 20px; }
+        
+        /* מבנה הגריד הראשי - ניהול על ידי קלאסים ולא דרך עיצוב מאולץ בקוד JS */
+        .grid-layout { display: grid; gap: 20px; }
+        .manager-layout { grid-template-columns: 1.2fr 3fr; }
+        .settings-layout { grid-template-columns: 1fr 2.5fr; }
+        .constraints-layout { grid-template-columns: 1fr 1fr; }
+        .employee-mode { grid-template-columns: 1fr !important; }
 
         .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; box-sizing: border-box; }
         .card-title { font-size: 18px; font-weight: 600; margin-top: 0; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); color: var(--text-main); }
@@ -145,7 +151,6 @@
         .ai-command-bar button { background: var(--primary); border: none; color: white; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .ai-command-bar button.mic-btn { background: transparent; border: 1px solid var(--primary); font-size: 18px; }
 
-        /* גריד שבועי - רספונסיבי לחלוטין */
         .week-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; width: 100%; box-sizing: border-box; }
         .day-column { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; }
         .day-header { text-align: center; font-weight: bold; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; color: var(--text-main); display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 16px; }
@@ -157,11 +162,7 @@
         .shift-period.sick { background: var(--sick-bg); border-color: var(--danger); }
         body.light-mode .shift-period.evening { border-color: #a5b4fc; }
 
-        .shift-period.shift-shortage {
-            border-color: var(--danger) !important;
-            background: rgba(239, 68, 68, 0.15) !important;
-            box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
-        }
+        .shift-period.shift-shortage { border-color: var(--danger) !important; background: rgba(239, 68, 68, 0.15) !important; box-shadow: 0 0 12px rgba(239, 68, 68, 0.4); }
 
         .shift-section-title { font-size: 13px; font-weight: bold; margin-bottom: 8px; text-align: center; }
         .morning .shift-section-title { color: #d97706; }
@@ -180,7 +181,6 @@
         .time-picker-wrapper { display: flex; align-items: center; gap: 8px; background: var(--input-bg); padding: 5px 10px; border-radius: 10px; border: 1px solid var(--border-color); flex:1;}
         .time-picker-wrapper input[type="time"] { background: transparent; color: var(--text-main); border: none; font-size: 14px; outline: none; cursor: pointer; flex: 1; text-align: left; direction: ltr; }
 
-        /* עיצוב הגדרות מיוחד לסליידרים */
         .settings-header-box { text-align: right; margin-bottom: 25px; }
         .settings-header-box h2 { margin: 0 0 5px 0; color: var(--text-main); font-size: 22px; font-weight:bold; }
         .settings-header-box p { margin: 0; color: var(--text-muted); font-size: 14px; }
@@ -200,7 +200,6 @@
         body.light-mode .custom-slider::-webkit-slider-runnable-track { background: #e2e8f0; }
         .custom-slider::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #a855f7; cursor: pointer; margin-top: -6px; box-shadow: 0 0 8px rgba(168,85,247,0.6); }
 
-        /* טבלה רספונסיבית */
         .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); width: 100%; box-sizing: border-box; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th, td { border: 1px solid var(--border-color); padding: 12px; text-align: right; }
@@ -211,58 +210,39 @@
         
         #manager-app-interface { display: none; } 
 
-        /* --- התאמה מקיפה למובייל וסמארטפון (MEDIA QUERIES) --- */
+        /* --- התאמה מקיפה לסמארטפון ומובייל --- */
         @media (max-width: 1024px) { 
-            .grid-layout { grid-template-columns: 1fr; } 
-            .week-grid { grid-template-columns: repeat(2, 1fr); } 
-            .group-container { grid-template-columns: 1fr; } 
+            /* כפיית תצוגה אנכית (טורים) על כל מבני הגריד במסכים קטנים כדי למנוע גלילה לצד */
+            .manager-layout, .settings-layout, .constraints-layout { grid-template-columns: 1fr !important; } 
+            .week-grid { grid-template-columns: repeat(2, 1fr) !important; } 
+            .group-container { grid-template-columns: 1fr !important; } 
         }
 
         @media (max-width: 768px) { 
             header { flex-direction: column; align-items: stretch; gap: 12px; text-align: center; padding: 10px; } 
             .header-title-box { align-items: center; }
             
-            /* מניעת גלילה רוחבית בלשוניות - שינוי סידור להופעה מלאה וצפופה */
-            .nav-tabs { 
-                padding: 5px; 
-                gap: 3px; 
-            }
-            .tab-btn { 
-                min-width: 0; 
-                font-size: 11px; 
-                padding: 6px 2px;
-                border-radius: 8px;
-            }
-            
-            /* הפיכת הלוח השבועי לטור אנכי קריא ומלא ללא גלילה לצד */
-            .week-grid { 
-                grid-template-columns: 1fr !important; 
-                gap: 15px;
-            }
+            /* הפעלת הגריד השבועי על פני 100% רוחב המסך יום מתחת ליום - מסדר את כל הבעיה */
+            .week-grid { grid-template-columns: 1fr !important; gap: 15px; }
             
             .top-controls-bar { flex-direction: column; align-items: stretch; padding: 10px; } 
             .time-picker-wrapper { flex-direction: column; align-items: stretch; }
             
-            /* התאמת הטבלה הסופית שאינה רספונסיבית במקור למבנה כרטיסיות במובייל */
+            /* סידור טבלת היסטוריה במובייל ללא חיתוך */
             .table-responsive table, .table-responsive thead, .table-responsive tbody, .table-responsive th, .table-responsive td, .table-responsive tr { 
-                display: block; 
-                width: 100% !important;
-                box-sizing: border-box;
+                display: block; width: 100% !important; box-sizing: border-box; 
             }
-            .table-responsive thead { display: none; } /* הסתרת כותרת הטבלה הרחבה */
+            .table-responsive thead { display: none; }
             .table-responsive tr { margin-bottom: 15px; border: 1px solid var(--border-color); border-radius: 12px; padding: 8px; background: var(--card-bg); }
             .table-responsive td { text-align: right; border: none; border-bottom: 1px dashed var(--border-color); padding: 8px 4px; position: relative; }
             .table-responsive td:last-child { border-bottom: none; }
-            .table-responsive td::before { font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
-            
-            /* הוספת זיהוי דינמי של כותרות הימים במובייל */
-            .table-responsive td:nth-of-type(1)::before { content: "עובד/ת:"; }
-            .table-responsive td:nth-of-type(2)::before { content: "יום ראשון:"; }
-            .table-responsive td:nth-of-type(3)::before { content: "יום שני:"; }
-            .table-responsive td:nth-of-type(4)::before { content: "יום שלישי:"; }
-            .table-responsive td:nth-of-type(5)::before { content: "יום רביעי:"; }
-            .table-responsive td:nth-of-type(6)::before { content: "יום חמישי:"; }
-            .table-responsive td:nth-of-type(7)::before { content: "יום שישי:"; }
+            .table-responsive td:nth-of-type(1)::before { content: "עובד/ת:"; font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
+            .table-responsive td:nth-of-type(2)::before { content: "יום ראשון:"; font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
+            .table-responsive td:nth-of-type(3)::before { content: "יום שני:"; font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
+            .table-responsive td:nth-of-type(4)::before { content: "יום שלישי:"; font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
+            .table-responsive td:nth-of-type(5)::before { content: "יום רביעי:"; font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
+            .table-responsive td:nth-of-type(6)::before { content: "יום חמישי:"; font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
+            .table-responsive td:nth-of-type(7)::before { content: "יום שישי:"; font-weight: bold; color: var(--primary); display: block; margin-bottom: 4px; font-size: 12px; }
         }
     </style>
 </head>
@@ -363,17 +343,17 @@
     </div>
 
     <nav class="nav-tabs" id="main-nav-tabs">
-        <button class="tab-btn active" id="tab-build" onclick="switchTab('build')"><span>🗓️</span><span>לוח</span></button>
-        <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')"><span>👥</span><span>עובדים</span></button>
-        <button class="tab-btn" id="tab-constraints" onclick="switchTab('constraints')"><span>🔒</span><span>אילוצים</span></button>
-        <button class="tab-btn" id="tab-hr" onclick="switchTab('hr')"><span>📊</span><span>כח אדם</span></button>
-        <button class="tab-btn" id="tab-config" onclick="switchTab('config')"><span>⚙️</span><span>הגדרות</span></button>
-        <button class="tab-btn" id="tab-published" onclick="switchTab('published')"><span>📜</span><span>ארכיון</span></button>
+        <button class="tab-btn active" id="tab-build" onclick="switchTab('build')"><span style="font-size:16px;">🗓️</span><span>לוח</span></button>
+        <button class="tab-btn" id="tab-settings" onclick="switchTab('settings')"><span style="font-size:16px;">👥</span><span>עובדים</span></button>
+        <button class="tab-btn" id="tab-constraints" onclick="switchTab('constraints')"><span style="font-size:16px;">🔒</span><span>אילוצים</span></button>
+        <button class="tab-btn" id="tab-hr" onclick="switchTab('hr')"><span style="font-size:16px;">📊</span><span>כח אדם</span></button>
+        <button class="tab-btn" id="tab-config" onclick="switchTab('config')"><span style="font-size:16px;">⚙️</span><span>הגדרות</span></button>
+        <button class="tab-btn" id="tab-published" onclick="switchTab('published')"><span style="font-size:16px;">📜</span><span>ארכיון</span></button>
     </nav>
 
     <div class="container">
         <div id="view-build" class="view-content active">
-            <div class="grid-layout" id="manager-grid-interface">
+            <div class="grid-layout manager-layout" id="manager-grid-interface">
                 <div id="manager-controls-panel">
                     <div class="card">
                         <h3 class="card-title">פאנל שיבוץ מהיר</h3>
@@ -517,7 +497,7 @@
         </div>
 
         <div id="view-settings" class="view-content">
-            <div class="grid-layout" style="grid-template-columns: 1fr 2.5fr;">
+            <div class="grid-layout settings-layout">
                 <div class="card">
                     <h3 class="card-title">➕ הוספת עובד/ת</h3>
                     <div class="form-group"><label>שם מלא</label><input type="text" id="new-emp-name" class="form-control"></div>
@@ -526,7 +506,7 @@
                         <label>שיוך קבוצה צוותית</label>
                         <select id="new-emp-group" class="form-control">
                             <option value="קופאיות">קופאיות</option>
-                            <option value="malkatot">malkatot</option>
+                            <option value="malkatot">מלקטות</option>
                         </select>
                     </div>
                     <button class="btn" onclick="addEmployee()">שמור עובד</button>
@@ -546,11 +526,11 @@
                     </div>
                     <div class="group-container">
                         <div class="group-box" id="dropzone-cashiers" ondragover="allowDropGroup(event)" ondrop="dropToGroup(event, 'קופאיות')">
-                            <h4>🛒 קופאיות</h4>
+                            <h4 style="margin-top:0; color:var(--cyan-accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">🛒 קופאיות</h4>
                             <div id="group-cashiers-list"></div>
                         </div>
                         <div class="group-box" id="dropzone-pickers" ondragover="allowDropGroup(event)" ondrop="dropToGroup(event, 'malkatot')">
-                            <h4>📦 מלקטות</h4>
+                            <h4 style="margin-top:0; color:var(--cyan-accent); border-bottom:1px solid var(--border-color); padding-bottom:8px;">📦 מלקטות</h4>
                             <div id="group-pickers-list"></div>
                         </div>
                     </div>
@@ -566,9 +546,9 @@
                     <select id="manager-edit-emp-constraint" class="form-control" onchange="renderConstraintsTab()"></select>
                     <button class="btn btn-warning" style="margin-top: 15px; width:auto;" onclick="aiOptimizeEmployeeConstraints()">🤖 התאם אילוצים לצרכי המערכת (AI)</button>
                 </div>
-                <div id="manager-constraints-config" class="grid-layout" style="grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div class="form-group"><label>תאריך ושעת פתיחה לתזמון כללי</label><input type="datetime-local" id="const-open-date" class="form-control" onchange="saveConstraintsWindow()"></div>
-                    <div class="form-group"><label>תאריך ושעת סגירה לתזמון כללי</label><input type="datetime-local" id="const-close-date" class="form-control" onchange="saveConstraintsWindow()"></div>
+                <div id="manager-constraints-config" class="grid-layout constraints-layout">
+                    <div class="form-group"><label>תאריך ושעת פתיחה לתזמון</label><input type="datetime-local" id="const-open-date" class="form-control" onchange="saveConstraintsWindow()"></div>
+                    <div class="form-group"><label>תאריך ושעת סגירה לתזמון</label><input type="datetime-local" id="const-close-date" class="form-control" onchange="saveConstraintsWindow()"></div>
                 </div>
                 <div style="display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap;">
                     <button class="btn btn-success" style="flex:1;" onclick="openConstraintsToWednesday()">🔓 פתח אילוצים כעת</button>
@@ -733,9 +713,11 @@
     }
 
     function applyRoleRestrictions() {
+        const interfaceEl = document.getElementById('manager-grid-interface');
         if (currentUser.role === 'employee') {
             document.getElementById('manager-controls-panel').style.display = 'none';
-            document.getElementById('manager-grid-interface').style.gridTemplateColumns = '1fr';
+            interfaceEl.classList.add('employee-mode');
+            
             document.getElementById('tab-settings').style.display = "none";
             document.getElementById('manager-constraints-card').style.display = "none";
             document.getElementById('manager-ai-bar').style.display = "none";
@@ -744,7 +726,8 @@
             document.getElementById('tab-config').style.display = "none";
         } else {
             document.getElementById('manager-controls-panel').style.display = 'block';
-            document.getElementById('manager-grid-interface').style.gridTemplateColumns = '1.2fr 3fr';
+            interfaceEl.classList.remove('employee-mode');
+            
             document.getElementById('tab-settings').style.display = "flex";
             document.getElementById('manager-constraints-card').style.display = "block";
             document.getElementById('manager-ai-bar').style.display = "flex";
@@ -831,6 +814,7 @@
                 });
             });
         });
+
         if(!hasError) document.querySelectorAll('.emp-checkbox').forEach(cb => cb.checked = false); 
         saveState();
     }
@@ -876,7 +860,6 @@
 
     function removeShift(day, index) { state.draftSchedule[day].splice(index, 1); saveState(); }
 
-    /* --- הגדרות סליידרים --- */
     function syncSlidersUI() {
         if(!state.settings) return;
         ['morning', 'evening'].forEach(s => {
@@ -902,7 +885,6 @@
         saveState(); renderDraftGrid();
     }
 
-    /* --- מודלים של עריכה --- */
     function openModal(id) { document.getElementById(id).style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
@@ -957,7 +939,6 @@
         saveState(); closeModal('modal-edit-emp');
     }
 
-    /* --- Checkboxes Swap & Drag Drop --- */
     let selectedShiftsForSwap = []; 
     function handleShiftCheckbox(cb, day, index) {
         const val = `${day}|${index}`;
@@ -1252,7 +1233,11 @@
             daysOfWeek.forEach(day => {
                 const empShifts = (state.publishedSchedule[day] || []).filter(s => s.empId === emp.id);
                 if(empShifts.length > 0) {
-                    let text = empShifts.map(s => { if(s.type === 'vacation') return '🏖️ חופש'; if(s.type === 'sick') return '<span style="color:var(--danger);">🤒 מחלה</span>'; return `<span>${s.type==='morning'?'☀️ בוקר':'🌙 ערב'}</span><br><span style="font-size:11px; color:gray;">${s.role} (${s.start}-${s.end})</span>`; }).join('<br><br>');
+                    let text = empShifts.map(s => {
+                        if(s.type === 'vacation') return '🏖️ חופש';
+                        if(s.type === 'sick') return '<span style="color:var(--danger);">🤒 מחלה</span>';
+                        return `<span>${s.type==='morning'?'☀️ בוקר':'🌙 ערב'}</span><br><span style="font-size:11px; color:gray;">${s.role} (${s.start}-${s.end})</span>`;
+                    }).join('<br><br>');
                     tableHtml += `<td>${text}</td>`;
                 } else tableHtml += `<td style="color:#4b5563; text-align:center;">-</td>`;
             });

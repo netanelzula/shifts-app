@@ -119,6 +119,7 @@
 
         .btn { background-color: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 15px; transition: background 0.2s; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; box-sizing: border-box; }
         .btn:hover { background-color: var(--primary-hover); }
+        .btn:disabled { cursor: not-allowed; opacity: 0.5; }
         .btn-success { background-color: var(--success); }
         .btn-danger { background-color: var(--danger); }
         .btn-warning { background-color: #d97706; }
@@ -160,7 +161,6 @@
         .time-picker-wrapper { display: flex; align-items: center; gap: 8px; background: var(--input-bg); padding: 5px 10px; border-radius: 10px; border: 1px solid var(--border-color); flex:1;}
         .time-picker-wrapper input[type="time"] { background: transparent; color: var(--text-main); border: none; font-size: 14px; outline: none; cursor: pointer; flex: 1; text-align: left; direction: ltr; }
 
-        /* הגדרות סליידרים */
         .settings-header-box { text-align: right; margin-bottom: 25px; }
         .settings-header-box h2 { margin: 0 0 5px 0; color: var(--text-main); font-size: 22px; font-weight:bold; }
         .settings-header-box p { margin: 0; color: var(--text-muted); font-size: 14px; }
@@ -180,7 +180,6 @@
         body.light-mode .custom-slider::-webkit-slider-runnable-track { background: #e2e8f0; }
         .custom-slider::-webkit-slider-thumb { -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%; background: #a855f7; cursor: pointer; margin-top: -6px; box-shadow: 0 0 8px rgba(168,85,247,0.6); }
 
-        /* טבלה רספונסיבית */
         .table-responsive { overflow-x: auto; border-radius: 12px; border: 1px solid var(--border-color); width: 100%; box-sizing: border-box; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th, td { border: 1px solid var(--border-color); padding: 12px; text-align: right; }
@@ -224,6 +223,7 @@
 </head>
 <body>
 
+<!-- חלונות עריכה (Modals) -->
 <div id="modal-edit-shift" class="modal-overlay" style="display:none;">
     <div class="modal-box card">
         <h3 class="card-title" style="color:var(--cyan-accent);">✏️ עריכת משמרת ועדכון שעות</h3>
@@ -283,6 +283,7 @@
     </div>
 </div>
 
+<!-- מסך התחברות -->
 <div id="login-overlay">
     <div class="login-box">
         <h2 style="color:var(--cyan-accent); margin-top:0;">כניסה ל-ZULATECH</h2>
@@ -327,6 +328,7 @@
     </nav>
 
     <div class="container">
+        <!-- מסך לוח שיבוצים -->
         <div id="view-build" class="view-content active">
             <div class="grid-layout manager-layout" id="manager-grid-interface">
                 <div id="manager-controls-panel">
@@ -402,6 +404,7 @@
             </div>
         </div>
 
+        <!-- מסך הגדרות מינימום ומקסימום -->
         <div id="view-config" class="view-content">
             <div style="max-width: 800px; margin: 0 auto;">
                 <div class="settings-header-box">
@@ -471,6 +474,7 @@
             </div>
         </div>
 
+        <!-- מסך ניהול עובדים -->
         <div id="view-settings" class="view-content">
             <div class="grid-layout settings-layout">
                 <div class="card">
@@ -513,6 +517,7 @@
             </div>
         </div>
 
+        <!-- לשונית אילוצים -->
         <div id="view-constraints" class="view-content">
             <div class="card" id="manager-constraints-card">
                 <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:15px; border-bottom:1px solid var(--border-color); padding-bottom:15px; margin-bottom:15px;">
@@ -534,10 +539,12 @@
                 <div id="constraints-status-banner" style="margin-bottom: 15px; padding: 15px; border-radius: 10px; font-weight: bold; text-align: center;"></div>
                 <h3 class="card-title" id="constraints-action-title">אישור ושיבוץ אילוצים</h3>
                 <div id="constraints-form-wrapper">
-                    </div>
+                    <!-- יאוכלס דינמית על ידי JS -->
+                </div>
             </div>
         </div>
 
+        <!-- לשונית HR -->
         <div id="view-hr" class="view-content">
             <div class="card">
                 <h3 class="card-title">📊 כח אדם בזמן אמת (HR AI)</h3>
@@ -548,6 +555,7 @@
             </div>
         </div>
 
+        <!-- לשונית היסטוריה -->
         <div id="view-published" class="view-content">
             <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;" class="card-title">
@@ -570,15 +578,6 @@
         const manifestBlob = new Blob([JSON.stringify(manifest)], {type: 'application/json'});
         document.getElementById('dynamic-manifest').href = URL.createObjectURL(manifestBlob);
     }
-
-    // פונקציית עזר לתיבות סימון (אחת לכל יום)
-    window.uncheckOthers = function(cb, name) {
-        if(cb.checked) {
-            document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
-                if(el !== cb) el.checked = false;
-            });
-        }
-    };
 
     const firebaseConfig = {
       apiKey: "AIzaSyDjEIuw4UFJVhM0nE71nvTiIBS3tIGeI3Y",
@@ -697,7 +696,6 @@
         if (currentUser.role === 'employee') {
             document.getElementById('manager-controls-panel').style.display = 'none';
             interfaceEl.classList.add('employee-mode');
-            
             document.getElementById('tab-settings').style.display = "none";
             document.getElementById('manager-constraints-card').style.display = "none";
             document.getElementById('manager-ai-bar').style.display = "none";
@@ -707,7 +705,6 @@
         } else {
             document.getElementById('manager-controls-panel').style.display = 'block';
             interfaceEl.classList.remove('employee-mode');
-            
             document.getElementById('tab-settings').style.display = "flex";
             document.getElementById('manager-constraints-card').style.display = "block";
             document.getElementById('manager-ai-bar').style.display = "flex";
@@ -736,7 +733,8 @@
 
     function setupEmployeeDropdowns() {
         const empListDiv = document.getElementById('shift-emp-list');
-        if(!empListDiv) return; empListDiv.innerHTML = ""; 
+        if(!empListDiv) return; 
+        empListDiv.innerHTML = ""; 
         state.employees.forEach(emp => {
             const groupIndicator = emp.group === 'malkatot' ? 'מלקטת' : 'קופאית';
             empListDiv.innerHTML += `<label><input type="checkbox" class="emp-checkbox" value="${emp.id}"> ${emp.name} (${groupIndicator})</label>`;
@@ -815,9 +813,8 @@
                                 if(hasOverlap(day, emp.id, start, end)) return false; 
                                 
                                 const constraint = emp.constraints && emp.constraints[day];
-                                if(constraint === 'חופש' || constraint === 'לא זמינ/ה לעבוד באף משמרת') return false;
-                                if(type === 'morning' && constraint === 'מעדיפ/ה לעבוד ערב') return false;
-                                if(type === 'evening' && constraint === 'מעדיפ/ה לעבוד בוקר') return false;
+                                if(constraint === 'חופש' || constraint === 'לא יכול/ה לעבוד בוקר' && type==='morning') return false;
+                                if(constraint === 'לא יכול/ה לעבוד ערב' && type==='evening') return false;
                                 return true;
                             });
                             if(availableEmp) {
@@ -1112,6 +1109,42 @@
         }
     }
 
+    /* --- מנגנון אילוצים מתקדם לעובד / מנהל --- */
+    window.uncheckOthers = function(cb, name, day) {
+        if(cb.checked) {
+            document.querySelectorAll(`input[name="${name}"]`).forEach(el => {
+                if(el !== cb) el.checked = false;
+            });
+        }
+        window.handleConstraintChange(day);
+    };
+
+    window.handleConstraintChange = function(day) {
+        if(day) {
+            const container = document.getElementById('const-container-' + day);
+            const checked = document.querySelector(`input[name="const-${day}"]:checked`);
+            container.style.backgroundColor = 'var(--input-bg)';
+            if(checked) {
+                if(checked.value.includes('מעדיפ/ה')) container.style.backgroundColor = 'rgba(16, 185, 129, 0.15)'; 
+                else container.style.backgroundColor = 'rgba(239, 68, 68, 0.15)'; 
+            }
+        }
+
+        const totalSelected = document.querySelectorAll('.emp-const-cb:checked').length;
+        const btn = document.getElementById('btn-save-constraints');
+        const warning = document.getElementById('constraints-warning');
+
+        if (totalSelected > 2) {
+            warning.style.display = 'block';
+            btn.disabled = true;
+            btn.style.cursor = 'not-allowed';
+        } else {
+            warning.style.display = 'none';
+            btn.disabled = false;
+            btn.style.cursor = 'pointer';
+        }
+    };
+
     function renderConstraintsTab() {
         const banner = document.getElementById('constraints-status-banner');
         const formWrapper = document.getElementById('constraints-form-wrapper');
@@ -1124,38 +1157,47 @@
         if(isConstraintsWindowOpen()) { banner.style.backgroundColor = "rgba(16, 185, 129, 0.2)"; banner.style.color = "#34d399"; banner.innerHTML = `✅ חלון הגשת האילוצים פתוח כעת`; formWrapper.style.opacity = "1"; formWrapper.style.pointerEvents = "auto"; } 
         else { banner.style.backgroundColor = "rgba(239, 68, 68, 0.2)"; banner.style.color = "#f87171"; banner.innerHTML = `❌ חלון האילוצים סגור`; if(currentUser.role !== 'manager') { formWrapper.style.opacity = "0.3"; formWrapper.style.pointerEvents = "none"; } }
         
-        document.getElementById('constraints-action-title').innerText = currentUser.role === 'employee' ? `הגשת אילוצים והעדפות` : `ניהול ושיבוץ אילוצי עובדים (ראשון - חמישי)`;
-        
         if (currentUser.role === 'employee') {
             const targetEmp = state.employees.find(e => e.phone === currentUser.phone);
             if(!targetEmp) return;
             
-            let html = `<p style="font-size:14px; color:var(--text-muted); margin-bottom:15px;">סמן את ההעדפה שלך לכל יום (אפשרות אחת ליום):</p>
-                        <div class="week-grid" style="grid-template-columns: repeat(5, 1fr) !important;">`;
+            document.getElementById('constraints-action-title').innerText = `הגשת אילוצים והעדפות`;
+            let html = `<div id="constraints-warning" style="color:var(--danger); font-weight:bold; display:none; margin-bottom:10px; text-align:center;">בחר 2 אילוצים בשבוע בלבד!</div>
+                        <p style="font-size:14px; color:var(--text-muted); margin-bottom:15px;">סמן את ההעדפה שלך לכל יום (אפשרות אחת ליום, מקסימום 2 אילוצים בשבוע):</p>
+                        <div class="week-grid" style="grid-template-columns: repeat(5, 1fr) !important; gap: 15px;">`;
             
+            // עובד רואה רק ראשון עד חמישי
             ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].forEach(day => {
                 const val = (targetEmp.constraints && targetEmp.constraints[day]) ? targetEmp.constraints[day] : "";
                 html += `
-                    <div style="background:var(--input-bg); padding:12px; border-radius:12px; border:1px solid var(--border-color)">
-                        <strong style="display:block; margin-bottom:10px; color: var(--primary);">יום ${day}</strong>
-                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:13px; cursor:pointer; color:var(--text-main);">
-                            <input type="checkbox" name="const-${day}" value="לא זמינ/ה לעבוד באף משמרת" onchange="uncheckOthers(this, 'const-${day}')" ${val === 'לא זמינ/ה לעבוד באף משמרת' ? 'checked' : ''}> לא זמינ/ה 
+                    <div id="const-container-${day}" style="background:var(--input-bg); padding:15px; border-radius:12px; border:1px solid var(--border-color); transition: background 0.3s;">
+                        <strong style="display:block; margin-bottom:12px; color: var(--primary); font-size:16px;">יום ${day}</strong>
+                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:14px; cursor:pointer; color:var(--text-main);">
+                            <input type="checkbox" class="emp-const-cb" name="const-${day}" value="לא יכול/ה לעבוד בוקר" onchange="uncheckOthers(this, 'const-${day}', '${day}')" ${val === 'לא יכול/ה לעבוד בוקר' ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--danger);"> לא יכול/ה בוקר
                         </label>
-                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:13px; cursor:pointer; color:var(--text-main);">
-                            <input type="checkbox" name="const-${day}" value="מעדיפ/ה לעבוד בוקר" onchange="uncheckOthers(this, 'const-${day}')" ${val === 'מעדיפ/ה לעבוד בוקר' ? 'checked' : ''}> העדפה לבוקר
+                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:14px; cursor:pointer; color:var(--text-main);">
+                            <input type="checkbox" class="emp-const-cb" name="const-${day}" value="לא יכול/ה לעבוד ערב" onchange="uncheckOthers(this, 'const-${day}', '${day}')" ${val === 'לא יכול/ה לעבוד ערב' ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--danger);"> לא יכול/ה ערב
                         </label>
-                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:13px; cursor:pointer; color:var(--text-main);">
-                            <input type="checkbox" name="const-${day}" value="מעדיפ/ה לעבוד ערב" onchange="uncheckOthers(this, 'const-${day}')" ${val === 'מעדיפ/ה לעבוד ערב' ? 'checked' : ''}> העדפה לערב
+                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:14px; cursor:pointer; color:var(--text-main);">
+                            <input type="checkbox" class="emp-const-cb" name="const-${day}" value="מעדיפ/ה לעבוד בוקר" onchange="uncheckOthers(this, 'const-${day}', '${day}')" ${val === 'מעדיפ/ה לעבוד בוקר' ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--success);"> מעדיפ/ה בוקר
                         </label>
-                        <label style="display:flex; align-items:center; gap:8px; font-size:13px; cursor:pointer; color:var(--text-main);">
-                            <input type="checkbox" name="const-${day}" value="חופש" onchange="uncheckOthers(this, 'const-${day}')" ${val === 'חופש' ? 'checked' : ''}> חופש
+                        <label style="display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:14px; cursor:pointer; color:var(--text-main);">
+                            <input type="checkbox" class="emp-const-cb" name="const-${day}" value="מעדיפ/ה לעבוד ערב" onchange="uncheckOthers(this, 'const-${day}', '${day}')" ${val === 'מעדיפ/ה לעבוד ערב' ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--success);"> מעדיפ/ה ערב
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer; color:var(--text-main);">
+                            <input type="checkbox" class="emp-const-cb" name="const-${day}" value="חופש" onchange="uncheckOthers(this, 'const-${day}', '${day}')" ${val === 'חופש' ? 'checked' : ''} style="width:18px;height:18px;accent-color:var(--danger);"> חופש
                         </label>
                     </div>
                 `;
             });
-            html += `</div><button class="btn btn-success" style="margin-top:20px; width: 100%; max-width:300px;" onclick="saveEmployeeConstraints()">שמור אילוצים</button>`;
+            html += `</div><button id="btn-save-constraints" class="btn btn-success" style="margin-top:20px; width: 100%; max-width:300px; font-size:16px;" onclick="saveEmployeeConstraints()">שלח אילוצים</button>`;
             formWrapper.innerHTML = html;
+            
+            setTimeout(() => { ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].forEach(d => handleConstraintChange(d)); }, 100);
+
         } else {
+            // תצוגת מנהל - טבלאות לפי מחלקה
+            document.getElementById('constraints-action-title').innerText = `ניהול ושיבוץ אילוצי עובדים (ראשון - חמישי)`;
             const cashiers = state.employees.filter(e => e.group === 'קופאיות');
             const pickers = state.employees.filter(e => e.group === 'malkatot');
             
@@ -1170,14 +1212,18 @@
                     ["ראשון", "שני", "שלישי", "רביעי", "חמישי"].forEach(day => {
                         const pref = (emp.constraints && emp.constraints[day]) ? emp.constraints[day] : "";
                         if (pref) {
-                            gHtml += `<td>
-                                <label style="display:flex; align-items:center; gap:6px; font-size:12px; cursor:pointer; color:var(--text-main);">
+                            let color = 'var(--text-main)';
+                            if (pref.includes('מעדיפ/ה')) color = 'var(--success)';
+                            else if (pref.includes('לא יכול/ה') || pref === 'חופש') color = 'var(--danger)';
+
+                            gHtml += `<td style="color:${color}; font-weight:bold; font-size:12px;">
+                                <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
                                     <input type="checkbox" class="approve-constraint-cb" data-empid="${emp.id}" data-day="${day}" data-pref="${pref}" style="width:16px;height:16px;accent-color:var(--primary);">
                                     ${pref}
                                 </label>
                             </td>`;
                         } else {
-                            gHtml += `<td style="color:var(--text-muted); font-size:12px; text-align:center;">-</td>`;
+                            gHtml += `<td style="color:var(--text-main); font-size:12px; text-align:center;">-</td>`;
                         }
                     });
                     gHtml += `</tr>`;
@@ -1226,7 +1272,7 @@
             if(pref === 'מעדיפ/ה לעבוד בוקר') { type = 'morning'; start = '07:00'; end = '15:00'; }
             else if(pref === 'מעדיפ/ה לעבוד ערב') { type = 'evening'; start = '15:00'; end = '22:00'; }
             else if(pref === 'חופש') { type = 'vacation'; start = ''; end = ''; finalRole = 'חופש'; }
-            else return; // במקרה של "לא זמינ/ה" המערכת פשוט מדלגת ולא משבצת
+            else { cb.checked = false; return; } // אילוצי "לא יכול" לא משובצים אוטומטית כי הם רק חוסמים שיבוץ עתידי
 
             if(hasOverlap(day, empId, start || '00:00', end || '23:59')) {
                 overlaps++;
@@ -1239,7 +1285,7 @@
         
         if(changesMade > 0 || overlaps > 0) {
             saveState();
-            let msg = `בוצעו ${changesMade} שיבוצים בהצלחה לפי בחירתך!`;
+            let msg = `בוצעו ${changesMade} שיבוצים בהצלחה לפי ההעדפות בטבלה!`;
             if(overlaps > 0) msg += `\n(שים לב: ${overlaps} שיבוצים לא בוצעו עקב חפיפה עם משמרת קיימת באותו יום).`;
             alert(msg);
             switchTab('build'); 
@@ -1332,7 +1378,7 @@
     }
     function restoreHistoryItem(index) { if(!confirm("לשחזר את השבוע הנבחר?")) return; const loaded = JSON.parse(JSON.stringify(state.history[index].schedule)); daysOfWeek.forEach(d => state.draftSchedule[d] = loaded[d] || []); saveState(); switchTab('build'); }
 
-    /* --- פקודות AI --- */
+    /* --- מערכת פקודות AI --- */
     let recognition;
     function initSpeechRecognition() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
